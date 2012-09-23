@@ -1,0 +1,9 @@
+{{#if thumbnail}}
+	<img src="{{thumbnail}}">
+{{/if}}
+<p>{{title}} ({{year}})</p>
+{{#unless plotoutline}}
+	<p>{{plot}}</p>
+{{else}}
+	<p>{{plotoutline}}</p>
+{{/unless}}

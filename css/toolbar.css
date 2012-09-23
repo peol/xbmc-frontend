@@ -1,0 +1,24 @@
+/* #toolbar styles here */
+#toolbar {
+	overflow: auto;
+	width: 100%;
+	line-height: 42px;
+}
+
+#toolbar h1 {
+	margin: 0;
+	float: left;
+}
+
+#toolbar nav {
+	float: right;
+}
+
+#toolbar li {
+	display: inline-block;
+}
+
+#toolbar li a {
+	display: block;
+	padding: 0 8px;
+}
