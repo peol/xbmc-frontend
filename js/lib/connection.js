@@ -112,13 +112,13 @@ define([
 	 * If the socket isn't ready for sending/receiving yet, we queue the call for later.
 	 * @event connection:sent A pubsub publish to notify the client that some data has been sent.
 	 */
-	function send(data) {
+	function send(id, data) {
 		if (!isActive()) {
 			sendQueue.push(data);
 			return;
 		}
 		data.jsonrpc = '2.0';
-		data.id = 1;
+		data.id = id;
 		data = JSON.stringify(data);
 		socket.send(data);
 		pubsub.publish('connection:sent', data);

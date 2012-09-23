@@ -2,114 +2,170 @@ define([
 	'lib/connection',
 	'lib/pubsub'
 ], function(conn, pubsub) {
+	var handlers = {
+			/**
+			 * If any players are active, we need to get additional information
+			 * about what it's playing.
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'Player.GetActivePlayers': function(data) {
+				playerId = data.result.length && data.result[0].playerid;
+				if (playerId) {
+					getPlayerData(playerId);
+				}
+			},
+			/**
+			 * When we get data of the currently played item, we fork the data
+			 * either directly to the client (if it's not a library item) or
+			 * request additional information of the library item.
+			 * @event api:playerStopped A pubsub publish to notify that some media is playing on XBMC (only triggered if the item isn't in the library).
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'Player.GetItem': function(data) {
+				if (!data.result.item.id) {
+					// no id, we assume it's not a lib item
+					pubsub.publish('api:video', data.result.item);
+				} else {
+					handlers['Player.OnPlay']({ params: { data: { item: data.result.item } } });
+				}
+			},
+			/**
+			 * Whenever the user plays an item, we check if we have a getter method for that
+			 * type (and triggers the getter if it exist).
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'Player.OnPlay': function(data) {
+				data = data.params.data.item;
+				var id = data.id,
+					getter = getters[data.type];
+				if (id && getter) {
+					getter(id);
+				}
+			},
+			/**
+			 * Propagate playback stopped to the client.
+			 * @event api:playerStopped A pubsub publish to notify that the XBMC player has stopped.
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'Player.OnStop': function(data) {
+				pubsub.publish('api:playerStopped');
+			},
+			/**
+			 * Propagate tv episode details to the client.
+			 * @event api:episode A pubsub publish to the client, with tv episode data.
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'VideoLibrary.GetEpisodeDetails': function(data) {
+				pubsub.publish('api:episode', data.result.episodedetails);
+			},
+			/**
+			 * Propagate movie details to the client.
+			 * @event api:movie A pubsub publish to the client, with movie data.
+			 * @param {Object} data Data received from the socket/XBMC.
+			 */
+			'VideoLibrary.GetMovieDetails': function(data) {
+				pubsub.publish('api:movie', data.result.moviedetails);
+			}
+		},
+		getters = {
+			/**
+			 * Getter method for tv episode details.
+			 * @param {Number} id The tv episode library ID.
+			 */
+			episode: function(id) {
+				send('VideoLibrary.GetEpisodeDetails', {
+					method: 'VideoLibrary.GetEpisodeDetails',
+					params: {
+						episodeid: id,
+						properties: [
+							'title',
+							'showtitle',
+							'plot',
+							'season',
+							'episode',
+							'thumbnail'
+						]
+					}
+				});
+			},
+			/**
+			 * Getter method for movie details.
+			 * @param {Number} id The movie library ID.
+			 */
+			movie: function(id) {
+				send('VideoLibrary.GetMovieDetails', {
+					method: 'VideoLibrary.GetMovieDetails',
+					params: {
+						movieid: id,
+						properties: [
+							'title',
+							'year',
+							'plotoutline',
+							'plot',
+							'thumbnail'
+						]
+					}
+				});
+			}
+		};
 
 	/**
-	 * `routeData` basically only take the initial data from
-	 * the websocket and re-routes it depending on a few
-	 * parameters. We do this because the XBMC websocket is
-	 * not giving us all data we need, so we separate notifications
-	 * (info pushed to us) from RPC call responses because the data.
-	 * response is so different between them.
-	 * @param {Object} data The data sent from socket.
+	 * Wrapper for `connection.send`, currently only works as a proxy
+	 * but can be expanded to handle API-internal stuff before sending.
+	 * @param {Dynamic} id A unique ID used to tie request with response.
+	 * @param {Object} data Data to be sent to the socket/XBMC.
+	 */
+	function send(id, data) {
+		conn.send(id, data);
+	}
+
+	/**
+	 * `routeData` handles initial incoming data. If there's a handler for this response,
+	 * it'll fork the data to it, otherwise will try to handle it through
+	 * `unhandledMethod`.
+	 * @param {Object} data Data received from the socket/XBMC.
 	 */
 	function routeData(data) {
-		if (data.method) {
-			routeNotification(data);
+		if (handlers[data.id || data.method]) {
+			handlers[data.id || data.method](data);
 		} else {
-			routeRPC(data);
+			unhandledMethod(data);
 		}
 	}
 
 	/**
-	 * `routeNotification` parses any notifications from the socket.
-	 * Depending on the type, we assume stuff is happening, even if the
-	 * call might have been triggered in XBMC due to other things (e.g.)
-	 * `Player.OnStop` might have been triggered, but XBMC never actually
-	 * played anything.
-	 * @event api:playerStarted A pubsub publish when XBMC player starts.
-	 * @event api:playerStopped A pubsub publish when XBMC player stops.
-	 * @event api:playerPaused A pubsub publish when XBMC player pauses.
-	 * @param {Object} data The data sent from socket.
+	 * When called, it's the last resort to do something with the data. We send
+	 * the raw data to the client if anything would like to do something with it.
+	 * @event api:unhandled A pubsub publish to the client, with raw unhandled data.
+	 * @param {Object} data Data received from the socket/XBMC.
 	 */
-	function routeNotification(data) {
-		var method = data.method;
-		data = data.params.data;
-		console.log('routeNotification', method, data);
-		if (method === 'Player.OnPlay') {
-			pubsub.publish('api:playerStarted');
-			if (data.item.type === 'episode') {
-				getEpisode(data.item.id);
-			} else if (data.item.type === 'movie') {
-				getMovie(data.item.id);
-			}
-		} else if (method === 'Player.OnStop') {
-			pubsub.publish('api:playerStopped');
-		} else if (method === 'Player.OnPaused') {
-			pubsub.publish('api:playerPaused');
-		}
+	function unhandledMethod(data) {
+		pubsub.publish('api:unhandled', data);
 	}
 
 	/**
-	 * `routeRPC` parses any RPC call responses from the socket.
-	 * We try to normalize a few responses and propagate them through
-	 * the client using dynamic pubsub publishes.
-	 * @event api:{type} A pubsub publish where {type} can be either `episode` or `movie`.
-	 * @param {Object} data The data sent from socket.
+	 * `getPlayers` requests data on any active players.
 	 */
-	function routeRPC(data) {
-		data = data.result;
-		console.log('routeRPC', data);
-		['episode', 'movie'].forEach(function(t) {
-			var details = data[t + 'details'];
-			if (details) {
-				details.thumbnail = decodeURIComponent(details.thumbnail.replace(/^image:\/\//, ''));
-				pubsub.publish('api:' + t, details);
+	function getPlayers() {
+		send('Player.GetActivePlayers', { method: 'Player.GetActivePlayers' });
+	}
+
+	/**
+	 * `getPlayerData` requests data on a specific player.
+	 * @param {Number} playerId The XBMC player ID.
+	 */
+	function getPlayerData(playerId) {
+		send('Player.GetItem', {
+			method: 'Player.GetItem',
+			params: {
+				playerid: playerId,
+				properties: ['title', 'file', 'duration']
 			}
 		});
 	}
 
-	/**
-	 * `getEpisode` handles a request to receive more data on a TV episode.
-	 * @param {Number} id The tv episode ID in XBMC DB.
-	 */
-	function getEpisode(id) {
-		var call = {
-			method: 'VideoLibrary.GetEpisodeDetails',
-			params: {
-				episodeid: id,
-				properties: [
-					'title',
-					'plot',
-					'season',
-					'episode',
-					'showtitle',
-					'thumbnail'
-				]
-			}
-		};
-		conn.send(call);
-	}
-
-	/**
-	 * `getMovie` handles a request to receive more data on a movie.
-	 * @param {Number} id The movie ID in XBMC DB.
-	 */
-	function getMovie(id) {
-		var call = {
-			method: 'VideoLibrary.GetMovieDetails',
-			params: {
-				movieid: id,
-				properties: [
-					'title',
-					'year',
-					'plotoutline',
-					'plot',
-					'thumbnail'
-				]
-			}
-		};
-		conn.send(call);
-	}
+	// retrieve initial data
+	getPlayers();
 
 	pubsub.subscribe('connection:received', routeData);
 });
