@@ -3,113 +3,113 @@ define([
 	'lib/pubsub'
 ], function(conn, pubsub) {
 	var handlers = {
-			/**
-			 * If any players are active, we need to get additional information
-			 * about what it's playing.
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'Player.GetActivePlayers': function(data) {
-				playerId = data.result.length && data.result[0].playerid;
-				if (playerId) {
-					getPlayerData(playerId);
-				}
-			},
-			/**
-			 * When we get data of the currently played item, we fork the data
-			 * either directly to the client (if it's not a library item) or
-			 * request additional information of the library item.
-			 * @event api:playerStopped A pubsub publish to notify that some media is playing on XBMC (only triggered if the item isn't in the library).
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'Player.GetItem': function(data) {
-				if (!data.result.item.id) {
-					// no id, we assume it's not a lib item
-					pubsub.publish('api:video', data.result.item);
-				} else {
-					handlers['Player.OnPlay']({ params: { data: { item: data.result.item } } });
-				}
-			},
-			/**
-			 * Whenever the user plays an item, we check if we have a getter method for that
-			 * type (and triggers the getter if it exist).
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'Player.OnPlay': function(data) {
-				data = data.params.data.item;
-				var id = data.id,
-					getter = getters[data.type];
-				if (id && getter) {
-					getter(id);
-				} else {
-					getPlayers();
-				}
-			},
-			/**
-			 * Propagate playback stopped to the client.
-			 * @event api:playerStopped A pubsub publish to notify that the XBMC player has stopped.
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'Player.OnStop': function(data) {
-				pubsub.publish('api:playerStopped');
-			},
-			/**
-			 * Propagate tv episode details to the client.
-			 * @event api:episode A pubsub publish to the client, with tv episode data.
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'VideoLibrary.GetEpisodeDetails': function(data) {
-				pubsub.publish('api:episode', scrubData(data.result.episodedetails));
-			},
-			/**
-			 * Propagate movie details to the client.
-			 * @event api:movie A pubsub publish to the client, with movie data.
-			 * @param {Object} data Data received from the socket/XBMC.
-			 */
-			'VideoLibrary.GetMovieDetails': function(data) {
-				pubsub.publish('api:movie', scrubData(data.result.moviedetails));
+		/**
+		 * If any players are active, we need to get additional information
+		 * about what it's playing.
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'Player.GetActivePlayers': function(data) {
+			playerId = data.result.length && data.result[0].playerid;
+			if (playerId) {
+				getPlayerData(playerId);
 			}
 		},
-		getters = {
-			/**
-			 * Getter method for tv episode details.
-			 * @param {Number} id The tv episode library ID.
-			 */
-			episode: function(id) {
-				send('VideoLibrary.GetEpisodeDetails', {
-					method: 'VideoLibrary.GetEpisodeDetails',
-					params: {
-						episodeid: id,
-						properties: [
-							'title',
-							'showtitle',
-							'plot',
-							'season',
-							'episode',
-							'thumbnail'
-						]
-					}
-				});
-			},
-			/**
-			 * Getter method for movie details.
-			 * @param {Number} id The movie library ID.
-			 */
-			movie: function(id) {
-				send('VideoLibrary.GetMovieDetails', {
-					method: 'VideoLibrary.GetMovieDetails',
-					params: {
-						movieid: id,
-						properties: [
-							'title',
-							'year',
-							'plotoutline',
-							'plot',
-							'thumbnail'
-						]
-					}
-				});
+		/**
+		 * When we get data of the currently played item, we fork the data
+		 * either directly to the client (if it's not a library item) or
+		 * request additional information of the library item.
+		 * @event api:playerStopped A pubsub publish to notify that some media is playing on XBMC (only triggered if the item isn't in the library).
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'Player.GetItem': function(data) {
+			if (!data.result.item.id) {
+				// no id, we assume it's not a lib item
+				pubsub.publish('api:video', data.result.item);
+			} else {
+				handlers['Player.OnPlay']({ params: { data: { item: data.result.item } } });
 			}
-		};
+		},
+		/**
+		 * Whenever the user plays an item, we check if we have a getter method for that
+		 * type (and triggers the getter if it exist).
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'Player.OnPlay': function(data) {
+			data = data.params.data.item;
+			var id = data.id,
+				getter = getters[data.type];
+			if (id && getter) {
+				getter(id);
+			} else {
+				getPlayers();
+			}
+		},
+		/**
+		 * Propagate playback stopped to the client.
+		 * @event api:playerStopped A pubsub publish to notify that the XBMC player has stopped.
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'Player.OnStop': function(data) {
+			pubsub.publish('api:playerStopped');
+		},
+		/**
+		 * Propagate tv episode details to the client.
+		 * @event api:episode A pubsub publish to the client, with tv episode data.
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'VideoLibrary.GetEpisodeDetails': function(data) {
+			pubsub.publish('api:episode', scrubData(data.result.episodedetails));
+		},
+		/**
+		 * Propagate movie details to the client.
+		 * @event api:movie A pubsub publish to the client, with movie data.
+		 * @param {Object} data Data received from the socket/XBMC.
+		 */
+		'VideoLibrary.GetMovieDetails': function(data) {
+			pubsub.publish('api:movie', scrubData(data.result.moviedetails));
+		}
+	},
+	getters = {
+		/**
+		 * Getter method for tv episode details.
+		 * @param {Number} id The tv episode library ID.
+		 */
+		episode: function(id) {
+			send('VideoLibrary.GetEpisodeDetails', {
+				method: 'VideoLibrary.GetEpisodeDetails',
+				params: {
+					episodeid: id,
+					properties: [
+						'title',
+						'showtitle',
+						'plot',
+						'season',
+						'episode',
+						'thumbnail'
+					]
+				}
+			});
+		},
+		/**
+		 * Getter method for movie details.
+		 * @param {Number} id The movie library ID.
+		 */
+		movie: function(id) {
+			send('VideoLibrary.GetMovieDetails', {
+				method: 'VideoLibrary.GetMovieDetails',
+				params: {
+					movieid: id,
+					properties: [
+						'title',
+						'year',
+						'plotoutline',
+						'plot',
+						'thumbnail'
+					]
+				}
+			});
+		}
+	};
 
 	/**
 	 * Wrapper for `connection.send`, currently only works as a proxy
