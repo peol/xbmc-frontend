@@ -22,3 +22,7 @@
 	display: block;
 	padding: 0 8px;
 }
+
+#toolbar .selected a {
+	color:red;
+}

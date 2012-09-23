@@ -20,10 +20,13 @@ define([
 			this.viewChanged(Backbone.history.fragment);
 		},
 		viewChanged: function(view) {
+			var viewObj = _.where(items, { view: view });
+			viewObj = viewObj.length ? viewObj : [{ label: 'Unknown' }];
+			items.forEach(function(item) {
+				if (item.view !== viewObj[0].view) item.classes = null;
+			});
 			this.set({
-				active: _.where(items, {
-					view: view
-				})[0]
+				active: viewObj[0]
 			});
 		}
 	}));
