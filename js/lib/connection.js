@@ -78,8 +78,10 @@ define([
 			message: evt.message || evt.data
 		});
 
-		if (!isActive() && retry) {
-			create(cachedUrl);
+		if (!isActive() && retry && !pendingTimer) {
+			pendingTimer = setTimeout(function() {
+				create(cachedUrl);
+			}, retry);
 		}
 	}
 
