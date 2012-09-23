@@ -2,10 +2,10 @@ define([
 	'Backbone',
 	'lib/pubsub',
 	'lib/xbmcapi'
-], function(Backbone, pubsub, api, tmplEpisode) {
+], function(Backbone, pubsub, api) {
 	return (Backbone.Model.extend({
 		defaults: {
-			type: 'unknown',
+			type: 'none',
 			templateData: {}
 		},
 		initialize: function() {
