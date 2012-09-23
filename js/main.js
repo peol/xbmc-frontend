@@ -24,10 +24,4 @@ define('Backbone', ['BackboneLib'], function($) {
 	return Backbone.noConflict();
 });
 
-require([
-	'lib/connection',
-	'router',
-	'app'
-], function(conn) {
-	conn.create('192.168.1.3:9090');
-});
+require(['app']);
