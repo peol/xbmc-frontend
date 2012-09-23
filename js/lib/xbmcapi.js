@@ -40,6 +40,8 @@ define([
 					getter = getters[data.type];
 				if (id && getter) {
 					getter(id);
+				} else {
+					getPlayers();
 				}
 			},
 			/**
@@ -56,7 +58,7 @@ define([
 			 * @param {Object} data Data received from the socket/XBMC.
 			 */
 			'VideoLibrary.GetEpisodeDetails': function(data) {
-				pubsub.publish('api:episode', data.result.episodedetails);
+				pubsub.publish('api:episode', scrubData(data.result.episodedetails));
 			},
 			/**
 			 * Propagate movie details to the client.
@@ -64,7 +66,7 @@ define([
 			 * @param {Object} data Data received from the socket/XBMC.
 			 */
 			'VideoLibrary.GetMovieDetails': function(data) {
-				pubsub.publish('api:movie', data.result.moviedetails);
+				pubsub.publish('api:movie', scrubData(data.result.moviedetails));
 			}
 		},
 		getters = {
@@ -162,6 +164,18 @@ define([
 				properties: ['title', 'file', 'duration']
 			}
 		});
+	}
+
+	/**
+	 * `scrubData` tries to fix data properties not ready for output yet.
+	 * @param {Object} data The data to be scrubbed.
+	 * @returns {Object} The scrubbed data.
+	 */
+	function scrubData(data) {
+		if (data.thumbnail) {
+			data.thumbnail = decodeURIComponent(data.thumbnail.replace(/^image:\/\//ig, ''));
+		}
+		return data;
 	}
 
 	// retrieve initial data
