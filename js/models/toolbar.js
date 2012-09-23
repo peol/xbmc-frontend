@@ -1,8 +1,8 @@
 define([
 	'Backbone',
 	'lodash',
-	'router'
-], function(Backbone, _, router) {
+	'lib/pubsub'
+], function(Backbone, _, pubsub) {
 	var items = [
 		{ label: 'Overview', view: 'overview' },
 		{ label: 'Remote', view: 'remote' },
@@ -16,14 +16,15 @@ define([
 			navItems: items
 		},
 		initialize: function() {
-			router.on('all', function() {
-				this.set({
-					active: _.where(items, {
-						view: Backbone.history.fragment
-					})[0]
-				});
-			}, this);
-			router.trigger('all');
+			pubsub.subscribe('router:viewchange', this.viewChanged, this);
+			this.viewChanged(Backbone.history.fragment);
+		},
+		viewChanged: function(view) {
+			this.set({
+				active: _.where(items, {
+					view: view
+				})[0]
+			});
 		}
 	}));
 });

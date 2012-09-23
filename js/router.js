@@ -1,10 +1,11 @@
 define([
 	'jquery',
 	'Backbone',
+	'lib/pubsub',
 	'views/remote',
 	'views/unknown',
 	'views/overview'
-], function($, Backbone, RemoteView, UnknownView, OverviewView) {
+], function($, Backbone, pubsub, RemoteView, UnknownView, OverviewView) {
 	var AppRouter = Backbone.Router.extend({
 			routes: {
 				// the overview view
@@ -30,6 +31,11 @@ define([
 			}
 		}),
 		router = new AppRouter();
+
+		router.on('all', function() {
+			pubsub.publish('router:viewchange', Backbone.history.fragment);
+		});
+
     Backbone.history.start();
     return router;
 });
