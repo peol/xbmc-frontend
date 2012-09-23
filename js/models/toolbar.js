@@ -23,7 +23,7 @@ define([
 			var viewObj = _.where(items, { view: view });
 			viewObj = viewObj.length ? viewObj : [{ label: 'Unknown' }];
 			items.forEach(function(item) {
-				if (item.view !== viewObj[0].view) item.classes = null;
+				item.classes = item.view === viewObj[0].view ? 'selected' : null;
 			});
 			this.set({
 				active: viewObj[0]
