@@ -1,0 +1,8 @@
+.instanceList {
+	float: left;
+	list-style: none;
+}
+
+.instanceList .true {
+	color: red;
+}

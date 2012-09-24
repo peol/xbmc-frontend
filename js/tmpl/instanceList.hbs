@@ -1,0 +1,12 @@
+<ul class="instanceList">
+{{#unless this.length}}
+	<li>No instances.</li>
+{{/unless}}
+{{#each this}}
+	<li class="{{isActive}}">
+		<a class="remove">[remove]</a>
+		<a class="set-active">[set active]</a>
+		{{label}} ({{host}}:{{port}})
+	</li>
+{{/each}}
+</ul>
