@@ -58,7 +58,9 @@ define([
 	 */
 	function open(evt) {
 		clearPending();
-		sendQueue.forEach(send);
+		sendQueue.forEach(function(data) {
+			send.apply(this, data);
+		});
 		sendQueue = [];
 		pubsub.publish('connection:opened', {
 			url: cachedUrl
@@ -113,18 +115,22 @@ define([
 	 * @event connection:sent A pubsub publish to notify the client that some data has been sent.
 	 */
 	function send(id, data) {
+		if (arguments.length !== 2) {
+			throw new Error('Missing arguments in connection#send');
+		}
+
 		if (!isActive()) {
-			sendQueue.push(data);
+			sendQueue.push([id, data]);
 			return;
 		}
 		data.jsonrpc = '2.0';
 		data.id = id;
+		pubsub.publish('connection:sent', data);
 		data = JSON.stringify(data);
 		socket.send(data);
-		pubsub.publish('connection:sent', data);
 	}
 
-	['created', 'opened', 'received', 'error'].forEach(function(method) {
+	['created', 'opened', 'received', 'sent', 'error'].forEach(function(method) {
 		pubsub.subscribe('connection:' + method, function(data) { console.log(method, data); });
 	});
 
