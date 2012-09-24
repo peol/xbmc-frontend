@@ -13,6 +13,8 @@ define([
 				insts.forEach(function(inst) {
 					self.add(new InstanceModel(inst));
 				});
+			} else {
+				this.save();
 			}
 			this.on('add', this.updateModels);
 			this.on('remove', this.updateModels);
@@ -20,8 +22,8 @@ define([
 		updateModels: function() {
 			if (this.length === 1 || !this.where({ isActive: true }).length && this.length > 0) {
 				this.at(0).set('isActive', true);
-				this.save();
 			}
+			this.save();
 		},
 		save: function() {
 			this.localStorage.set('instances', this.toJSON());

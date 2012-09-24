@@ -25,7 +25,7 @@ define([
 		},
 		remove: function(e) {
 			var index = $(e.target).closest('li').index();
-			Instances.remove(Instances.at(index)).save();
+			Instances.remove(Instances.at(index));
 			this.render();
 		},
 		render: function(insts) {

@@ -28,7 +28,7 @@ define([
 				inst.set('port', port);
 			}
 
-			Instances.add(inst).save();
+			Instances.add(inst);
 			this.$el.find('input').val('');
 			this.trigger('saved');
 		},
