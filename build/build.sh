@@ -1,0 +1,1 @@
+node ../js/components/hbs/r.js -o buildconfig.js 
