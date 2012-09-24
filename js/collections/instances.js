@@ -3,7 +3,7 @@ define([
 	'models/instance',
 	'lib/store'
 ], function(Backbone, InstanceModel, Store) {
-	return (Backbone.Collection.extend({
+	return new (Backbone.Collection.extend({
 		model: InstanceModel,
 		localStorage: new Store('instances'),
 		initialize: function() {
@@ -19,13 +19,11 @@ define([
 		},
 		updateModels: function() {
 			if (this.length === 1 || !this.where({ isActive: true }).length && this.length > 0) {
-				console.log('updating', this.at(0), 'to active');
 				this.at(0).set('isActive', true);
 				this.save();
 			}
 		},
 		save: function() {
-			console.log('saving', this.toJSON());
 			this.localStorage.set('instances', this.toJSON());
 		}
 	}));

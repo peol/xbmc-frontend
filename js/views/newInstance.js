@@ -4,15 +4,14 @@ define([
 	'collections/instances',
 	'models/instance',
 	'hbs!tmpl/newInstance'
-], function($, Backbone, InstancesCollection, InstanceModel, tmpl) {
+], function($, Backbone, Instances, InstanceModel, tmpl) {
 	return (Backbone.View.extend({
 		el: $('<div/>'),
 		events: {
 			'click button': 'save'
 		},
 		save: function() {
-			var coll = new InstancesCollection(),
-				inst = new InstanceModel(),
+			var inst = new InstanceModel(),
 				label = this.$el.find('.label').val(),
 				host = this.$el.find('.host').val(),
 				port = +this.$el.find('.port').val();
@@ -29,7 +28,7 @@ define([
 				inst.set('port', port);
 			}
 
-			coll.add(inst).save();
+			Instances.add(inst).save();
 			this.$el.find('input').val('');
 			this.trigger('saved');
 		},

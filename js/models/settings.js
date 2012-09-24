@@ -1,10 +1,7 @@
 define([
-	'Backbone',
-	'collections/instances'
-], function(Backbone, InstancesCollection) {
+	'Backbone'
+], function(Backbone) {
 	return (Backbone.Model.extend({
-		defaults: {
-			instances: new InstancesCollection()
-		}
+		defaults: {}
 	}));
 });

@@ -4,7 +4,7 @@ define([
 	'collections/instances',
 	'models/instance',
 	'hbs!tmpl/instanceList'
-], function($, Backbone, InstancesCollection, InstanceModel, tmpl) {
+], function($, Backbone, Instances, InstanceModel, tmpl) {
 	return (Backbone.View.extend({
 		el: $('<div/>'),
 		events: {
@@ -12,26 +12,24 @@ define([
 			'click .remove': 'remove'
 		},
 		setActive: function(e) {
-			var index = $(e.target).closest('li').index(),
-				coll = new InstancesCollection();
-			coll.forEach(function(inst, i) {
+			var index = $(e.target).closest('li').index();
+			Instances.forEach(function(inst, i) {
 				if (inst.get('isActive') && i !== index) {
 					inst.set('isActive', false);
 				} else if (i === index) {
 					inst.set('isActive', true);
 				}
 			});
-			coll.save();
+			Instances.save();
 			this.render();
 		},
 		remove: function(e) {
-			var index = $(e.target).closest('li').index(),
-				coll = new InstancesCollection();
-			coll.remove(coll.at(index)).save();
+			var index = $(e.target).closest('li').index();
+			Instances.remove(Instances.at(index)).save();
 			this.render();
 		},
 		render: function(insts) {
-			this.$el.html(tmpl((new InstancesCollection()).toJSON()));
+			this.$el.html(tmpl(Instances.toJSON()));
 			console.log('[instanceList:view] rendered');
 			return this;
 		}
