@@ -22,6 +22,7 @@ define([
 				html = renderer ? renderer(model.templateData) : tmpl({});
 			this.$el.html(html);
 			console.log('[nowPlaying:view] rendered');
+			return this;
 		}
 	}));
 });

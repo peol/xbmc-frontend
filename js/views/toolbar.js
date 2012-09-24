@@ -11,6 +11,7 @@ define([
 		render: function() {
 			this.$el.html(tmpl(this.model.toJSON()));
 			console.log('[toolbar:view] rendered');
+			return this;
 		}
 	}));
 });

@@ -8,6 +8,7 @@ define([
 		render: function() {
 			this.$el.html(tmpl());
 			console.log('[overview:view] rendered');
+			return this;
 		}
 	}));
 });
