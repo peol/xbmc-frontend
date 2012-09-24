@@ -1,5 +1,9 @@
 {{#if thumbnail}}
-	<img src="{{thumbnail}}">
+<div class="thumbnail">
+		<img src="{{thumbnail}}">
+</div>
 {{/if}}
-<p>{{showtitle}}</p>
-<p>{{label}}: {{plot}}</p>
+<div class="information">
+	<h2>{{showtitle}} (Season {{season}}, episode {{episode}})</h2>
+	<p>{{label}}: {{plot}}</p>
+</div>
