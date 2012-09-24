@@ -16,7 +16,7 @@ define([
 	};
 
 	Store.prototype.remove = function(key) {
-		delete localStorage[this.prefix + 'key'];
+		delete localStorage[this.prefix + key];
 	};
 
 	return Store;
