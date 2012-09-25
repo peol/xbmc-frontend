@@ -13,14 +13,7 @@ define([
 		},
 		setActive: function(e) {
 			var index = $(e.target).closest('li').index();
-			Instances.forEach(function(inst, i) {
-				if (inst.get('isActive') && i !== index) {
-					inst.set('isActive', false);
-				} else if (i === index) {
-					inst.set('isActive', true);
-				}
-			});
-			Instances.save();
+			Instances.setActive(index);
 			this.render();
 		},
 		remove: function(e) {

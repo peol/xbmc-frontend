@@ -15,6 +15,7 @@ define([
 	 * @event connection:created A pubsub publish to notify that a connection try has started.
 	 */
 	function create(url) {
+		close();
 		cachedUrl = url;
 		socket = new WebSocket('ws://' + url);
 		socket.onopen = open;
@@ -24,9 +25,7 @@ define([
 		pubsub.publish('connection:created', {
 			url: url
 		});
-		pendingTimer = setTimeout(function() {
-			socket.close();
-		}, timeout);
+		pendingTimer = setTimeout(close, timeout);
 	}
 
 	/**
@@ -73,25 +72,35 @@ define([
 	 * @event connection:error A pubsub publish to notify the client that we received errors from the socket.
 	 */
 	function error(evt) {
-		var wasTimeout = clearPending();
 		pubsub.publish('connection:error', {
 			url: cachedUrl,
 			closed: !isActive(),
 			message: evt.message || evt.data
 		});
-
-		if (!isActive() && retry && !pendingTimer) {
-			pendingTimer = setTimeout(function() {
-				create(cachedUrl);
-			}, retry);
-		}
 	}
 
 	/**
 	 * `close` is triggered from the socket, we handle this as an error in the client.
 	 */
 	function close(evt) {
-		error(evt);
+		clearPending();
+		if (!evt) {
+			if (socket) {
+				try {
+					socket.close();
+				} catch(err) {}
+			}
+			return;
+		} else {
+			if (!isActive() && retry && !pendingTimer) {
+				pendingTimer = setTimeout(function() {
+					create(cachedUrl);
+				}, retry);
+			}
+		}
+		pubsub.publish('connection:closed', {
+			url: cachedUrl
+		});
 	}
 
 	/**
@@ -130,7 +139,7 @@ define([
 		socket.send(data);
 	}
 
-	['created', 'opened', 'received', 'sent', 'error'].forEach(function(method) {
+	['created', 'opened', 'received', 'sent', 'error', 'closed'].forEach(function(method) {
 		pubsub.subscribe('connection:' + method, function(data) { console.log(method, data); });
 	});
 

@@ -18,6 +18,20 @@ define([
 			}
 			this.on('add', this.updateModels);
 			this.on('remove', this.updateModels);
+			this.on('change', this.updateModels);
+		},
+		setActive: function(index) {
+			this.forEach(function(inst, i) {
+				if (inst.get('isActive') && i !== index) {
+					inst.set({ isActive: false }, { silent: true });
+				} else if (i === index) {
+					inst.set({ isActive: true }, { silent: true });
+				}
+			});
+			this.save();
+		},
+		getActive: function() {
+			return this.where({ isActive: true });
 		},
 		updateModels: function() {
 			if (this.length === 1 || !this.where({ isActive: true }).length && this.length > 0) {
@@ -27,6 +41,7 @@ define([
 		},
 		save: function() {
 			this.localStorage.set('instances', this.toJSON());
+			this.trigger('save');
 		}
-	}));
+	}))();
 });
