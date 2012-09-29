@@ -6,7 +6,6 @@ define([
 	'hbs!tmpl/instanceList'
 ], function($, Backbone, Instances, InstanceModel, tmpl) {
 	return (Backbone.View.extend({
-		el: $('<div/>'),
 		events: {
 			'click .set-active': 'setActive',
 			'click .remove': 'remove'

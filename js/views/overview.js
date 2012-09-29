@@ -4,9 +4,11 @@ define([
 	'hbs!tmpl/overview'
 ], function($, Backbone, tmpl) {
 	return (Backbone.View.extend({
-		el: $('#stage'),
+		initialize: function() {
+			this.model.on('change', this.render, this);
+		},
 		render: function() {
-			this.$el.html(tmpl());
+			this.$el.html(tmpl(this.model.toJSON()));
 			console.log('[overview:view] rendered');
 			return this;
 		}

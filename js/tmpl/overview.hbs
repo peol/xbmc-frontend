@@ -1,1 +1,9 @@
-<p>Overview content should go here.</p>
+{{#if isActive}}
+	<p>Status: Connected to "{{instance.label}}" at {{instance.host}} on port {{instance.port}}</p>
+{{else}}
+	{{#if instance}}
+		<p>Status: Disconnected from "{{instance.label}}"</p>
+	{{else}}
+		<p>Status: Disconnected, no active instance. Please add one in <a href="#settings">Settings</a>.</p>
+	{{/if}}
+{{/if}}

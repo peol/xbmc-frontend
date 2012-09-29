@@ -7,7 +7,6 @@ define([
 	'hbs!tmpl/settings'*/
 ], function($, Backbone, InstanceModel, NewInstanceView, InstanceListView, tmpl) {
 	return (Backbone.View.extend({
-		el: $('#stage'),
 		initialize: function() {
 			this.instView = new NewInstanceView();
 			this.listView = new InstanceListView();

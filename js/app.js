@@ -7,19 +7,21 @@ define([
 	'collections/instances',
 	'lib/pubsub',
 	'router'
-], function(conn, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
+], function(Connection, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
 	(new ToolbarView({ model: new ToolbarModel() })).render();
 	(new NowPlayingView({ model: new NowPlayingModel() })).render();
-	var currentInstance;
 
+	var currentInstance, currentConnection;
 	function connect() {
-		var newInstance = Instances.getActive().toString();
-		if (currentInstance !== newInstance) {
+		var newInstance = Instances.getActive();
+		if (newInstance && currentInstance !== newInstance) {
 			currentInstance = newInstance;
-			conn.create(newInstance);
+			if (currentConnection) {
+				currentConnection.close("switch");
+			}
+			currentConnection = new Connection(newInstance.toString());
 		}
 	}
-
 	Instances.on('save', connect);
 	connect();
 });

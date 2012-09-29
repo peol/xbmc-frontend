@@ -1,6 +1,7 @@
 define([
-	'Backbone'
-], function(Backbone) {
+	'Backbone',
+	'lib/pubsub'
+], function(Backbone, pubsub) {
 	return (Backbone.Model.extend({
 		defaults: {
 			label: 'New XBMC Instance',
@@ -8,8 +9,17 @@ define([
 			port: 9090,
 			isActive: false
 		},
+		initialize: function() {
+			pubsub.subscribe('connection:open', this.setConnected, this);
+		},
+		setConnected: function(uri) {
+			this._isConnected = uri === this.toString();
+		},
+		isConnected: function() {
+			return this._isConnected;
+		},
 		toString: function() {
-			return this.get('host') + ':' + this.get('port');
+			return 'ws://' + this.get('host') + ':' + this.get('port') + '/jsonrpc';
 		}
 	}));
 });

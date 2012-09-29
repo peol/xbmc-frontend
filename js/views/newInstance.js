@@ -6,7 +6,6 @@ define([
 	'hbs!tmpl/newInstance'
 ], function($, Backbone, Instances, InstanceModel, tmpl) {
 	return (Backbone.View.extend({
-		el: $('<div/>'),
 		events: {
 			'click button': 'save'
 		},

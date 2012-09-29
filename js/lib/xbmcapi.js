@@ -1,7 +1,7 @@
 define([
-	'lib/connection',
-	'lib/pubsub'
-], function(conn, pubsub) {
+	'lib/pubsub',
+	'lib/connection'
+], function(pubsub) {
 	var handlers = {
 		/**
 		 * If any players are active, we need to get additional information
@@ -112,13 +112,14 @@ define([
 	};
 
 	/**
-	 * Wrapper for `connection.send`, currently only works as a proxy
-	 * but can be expanded to handle API-internal stuff before sending.
+	 * Publishes a topic that should be picked up by a connection handler,
+	 * currently only works as a proxy but can be expanded to handle API-internal
+	 * stuff before sending.
 	 * @param {Dynamic} id A unique ID used to tie request with response.
 	 * @param {Object} data Data to be sent to the socket/XBMC.
 	 */
 	function send(id, data) {
-		conn.send(id, data);
+		pubsub.publish('connection:transmit', { id: id, data: data });
 	}
 
 	/**
@@ -181,5 +182,5 @@ define([
 	// retrieve initial data
 	getPlayers();
 
-	pubsub.subscribe('connection:received', routeData);
+	pubsub.subscribe('connection:data', routeData);
 });

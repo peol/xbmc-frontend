@@ -31,7 +31,7 @@ define([
 			this.save();
 		},
 		getActive: function() {
-			return this.where({ isActive: true });
+			return this.where({ isActive: true })[0];
 		},
 		updateModels: function() {
 			if (this.length === 1 || !this.where({ isActive: true }).length && this.length > 0) {
