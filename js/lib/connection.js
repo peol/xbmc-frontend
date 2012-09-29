@@ -2,8 +2,8 @@ define([
 	'lib/pubsub'
 ], function(pubsub) {
 	/**
-	 * Creates a new connection, if URL is specified, it should
-	 * bootstrap and open the websocket as well (if URI is sent in).
+	 * Creates a new connection, if URI is specified, it should
+	 * bootstrap and open the websocket as well.
 	 * @constructor
 	 * @param {string} uri Optional URI, passed into Connection#create
 	 */
@@ -16,9 +16,9 @@ define([
 
 	/**
 	 * Connection#create is used to actually open up a connection, can
-	 * be used separately to delay connection attempts (if no URL is sent
+	 * be used separately to delay connection attempts (if no URI is sent
 	 * to the constructor).
-	 * @throws {error} If URL is missing
+	 * @throws {error} If URI is missing
 	 * @param {string} uri The URI to connect to
 	 */
 	Connection.prototype.create = function(uri) {

@@ -11,7 +11,7 @@ define([
 ], function($, Backbone, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel, SettingsModel) {
 	var stage = $('#stage'),
 		switchView = function(model) {
-			stage.html(model.el);
+			stage.html(model.render().el);
 		},
 		AppRouter = Backbone.Router.extend({
 			routes: {
@@ -27,16 +27,16 @@ define([
 				'*action': 'unknown'
 			},
 			overview: function() {
-				switchView((new OverviewView({ model: new OverviewModel() })).render());
+				switchView(new OverviewView({ model: new OverviewModel() }));
 			},
 			remote: function() {
-				switchView((new RemoteView()).render());
+				switchView(new RemoteView());
 			},
 			settings: function() {
-				switchView((new SettingsView({ model: new SettingsModel() })).render());
+				switchView(new SettingsView({ model: new SettingsModel() }));
 			},
 			unknown: function() {
-				switchView((new UnknownView()).render());
+				switchView(new UnknownView());
 			},
 			def: function() {
 				location.hash = 'overview';

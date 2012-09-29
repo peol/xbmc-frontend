@@ -20,7 +20,7 @@ require.config({
 	}
 });
 
-define('Backbone', ['BackboneLib'], function($) {
+define('Backbone', ['BackboneLib'], function() {
 	return Backbone.noConflict();
 });
 
