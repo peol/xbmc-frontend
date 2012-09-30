@@ -197,6 +197,13 @@ define([
 	}
 
 	/**
+	 * `sayHello` just notifies XBMC that we have connected to it.
+	 */
+	function sayHello() {
+		sendNotification(null, 'Web interface connected');
+	}
+
+	/**
 	 * `scrubData` tries to fix data properties not ready for output yet.
 	 * @param {Object} data The data to be scrubbed.
 	 * @returns {Object} The scrubbed data.
