@@ -41,9 +41,9 @@ define([
 		}),
 		router = new AppRouter();
 
-		router.on('all', function() {
-			pubsub.publish('router:viewchange', Backbone.history.fragment);
-		});
+	router.on('all', function() {
+		pubsub.publish('router:viewchange', Backbone.history.fragment);
+	});
 
     Backbone.history.start();
     return router;
