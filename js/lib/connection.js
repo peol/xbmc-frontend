@@ -106,6 +106,7 @@ define([
 		this.sendQueue.forEach(function(item) {
 			this.send.apply(this, item);
 		}.bind(this));
+		this.sendQueue = [];
 	};
 
 	/**
