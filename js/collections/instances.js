@@ -16,9 +16,7 @@ define([
 			} else {
 				this.save();
 			}
-			this.on('add', this.updateModels);
-			this.on('remove', this.updateModels);
-			this.on('change', this.updateModels);
+			this.on('add remove change', this.updateModels);
 		},
 		setActive: function(index) {
 			this.forEach(function(inst, i) {

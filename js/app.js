@@ -1,5 +1,6 @@
 define([
 	'lib/connection',
+	'lib/xbmcapi',
 	'views/toolbar',
 	'models/toolbar',
 	'views/nowPlaying',
@@ -7,7 +8,7 @@ define([
 	'collections/instances',
 	'lib/pubsub',
 	'router'
-], function(Connection, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
+], function(Connection, api, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
 	(new ToolbarView({ model: new ToolbarModel() })).render();
 	(new NowPlayingView({ model: new NowPlayingModel() })).render();
 
@@ -20,6 +21,7 @@ define([
 				currentConnection.close("switch");
 			}
 			currentConnection = new Connection(newInstance.toString());
+			api.setConnection(currentConnection);
 		}
 	}
 	Instances.on('save', connect);

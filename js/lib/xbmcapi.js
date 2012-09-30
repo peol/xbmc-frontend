@@ -1,8 +1,7 @@
 define([
-	'lib/pubsub',
-	'lib/connection'
+	'lib/pubsub'
 ], function(pubsub) {
-	var handlers = {
+	var _connection, handlers = {
 		/**
 		 * If any players are active, we need to get additional information
 		 * about what it's playing.
@@ -112,14 +111,16 @@ define([
 	};
 
 	/**
-	 * Publishes a topic that should be picked up by a connection handler,
-	 * currently only works as a proxy but can be expanded to handle API-internal
-	 * stuff before sending.
+	 * Only works as a proxy against Connection#send but can be expanded to handle
+	 * API-internal stuff before sending.
 	 * @param {Dynamic} id A unique ID used to tie request with response.
 	 * @param {Object} data Data to be sent to the socket/XBMC.
 	 */
 	function send(id, data) {
-		pubsub.publish('connection:transmit', { id: id, data: data });
+		if (!_connection) {
+			throw new Error("No connection set in xbmcapi");
+		}
+		_connection.send(id, data);
 	}
 
 	/**
@@ -168,6 +169,34 @@ define([
 	}
 
 	/**
+	 * `setConnection` sets the currently active connection we're working against.
+	 * @param {Connection} connection The new connection
+	 */
+	function setConnection(connection) {
+		_connection = connection;
+		// retrieve initial data
+		getPlayers();
+	}
+
+	/**
+	 * `sendNotification` can be used to broadcast GUI notifications on the XBMC
+	 * instance.
+	 * @param {string} title Optional title on the message
+	 * @param {string} message The message to broadcast
+	 * @param {number} displayTime The number of milliseconds to show the message
+	 */
+	function sendNotification(title, message, displayTime) {
+		send('GUI.ShowNotification', {
+			method: 'GUI.ShowNotification',
+			params: {
+				title: title || 'xbmc-frontend',
+				message: message || '',
+				displaytime: displayTime || 6000
+			}
+		});
+	}
+
+	/**
 	 * `scrubData` tries to fix data properties not ready for output yet.
 	 * @param {Object} data The data to be scrubbed.
 	 * @returns {Object} The scrubbed data.
@@ -179,8 +208,11 @@ define([
 		return data;
 	}
 
-	// retrieve initial data
-	getPlayers();
-
+	pubsub.subscribe('connection:open', sayHello);
 	pubsub.subscribe('connection:data', routeData);
+
+	return {
+		setConnection: setConnection,
+		sendNotification: sendNotification
+	};
 });
