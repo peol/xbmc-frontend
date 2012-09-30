@@ -15,11 +15,8 @@ define([
 		},
 		AppRouter = Backbone.Router.extend({
 			routes: {
-				// the overview view
 				'overview': 'overview',
-				// the remote view
 				'remote': 'remote',
-				// the settings view
 				'settings': 'settings',
 				// default view
 				'': 'def',
