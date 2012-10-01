@@ -9,6 +9,8 @@ define([
 	'lib/pubsub',
 	'router'
 ], function(Connection, api, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
+	'use strict';
+
 	(new ToolbarView({ model: new ToolbarModel() })).render();
 	(new NowPlayingView({ model: new NowPlayingModel() })).render();
 

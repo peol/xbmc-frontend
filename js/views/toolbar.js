@@ -3,6 +3,8 @@ define([
 	'Backbone',
 	'hbs!tmpl/toolbar'
 ], function($, Backbone, tmpl) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		el: $('#toolbar'),
 		initialize: function() {
@@ -10,7 +12,7 @@ define([
 		},
 		render: function() {
 			this.$el.html(tmpl(this.model.toJSON()));
-			console.log('[toolbar:view] rendered');
+			window.console.log('[toolbar:view] rendered');
 			return this;
 		}
 	}));

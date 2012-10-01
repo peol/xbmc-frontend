@@ -6,6 +6,8 @@ define([
 	'hbs!tmpl/nowPlayingEpisode',
 	'hbs!tmpl/nowPlayingMovie'
 ], function($, Backbone, tmpl, tmplVideo, tmplEpisode, tmplMovie) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		el: $('#nowPlaying'),
 		initialize: function() {
@@ -21,7 +23,7 @@ define([
 				renderer = this.renderers[model.type],
 				html = renderer ? renderer(model.templateData) : tmpl({});
 			this.$el.html(html);
-			console.log('[nowPlaying:view] rendered');
+			window.console.log('[nowPlaying:view] rendered');
 			return this;
 		}
 	}));

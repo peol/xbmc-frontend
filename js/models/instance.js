@@ -2,6 +2,8 @@ define([
 	'Backbone',
 	'lib/pubsub'
 ], function(Backbone, pubsub) {
+	'use strict';
+
 	return (Backbone.Model.extend({
 		defaults: {
 			label: 'New XBMC Instance',

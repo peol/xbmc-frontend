@@ -1,6 +1,8 @@
 define([
 	'lib/pubsub'
 ], function(pubsub) {
+	'use strict';
+
 	var _connection, handlers = {
 		/**
 		 * If any players are active, we need to get additional information
@@ -8,7 +10,7 @@ define([
 		 * @param {Object} data Data received from the socket/XBMC.
 		 */
 		'Player.GetActivePlayers': function(data) {
-			playerId = data.result.length && data.result[0].playerid;
+			var playerId = data.result.length && data.result[0].playerid;
 			if (playerId) {
 				getPlayerData(playerId);
 			}

@@ -2,9 +2,11 @@ define([
 	'jquery',
 	'Backbone'
 ], function($, Backbone) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		render: function() {
-			console.log('[remoteTouch:view] rendered');
+			window.console.log('[remoteTouch:view] rendered');
 			return this;
 		}
 	}));

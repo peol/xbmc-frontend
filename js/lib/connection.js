@@ -1,6 +1,8 @@
 define([
 	'lib/pubsub'
 ], function(pubsub) {
+	'use strict';
+
 	/**
 	 * Creates a new connection, if URI is specified, it should
 	 * bootstrap and open the websocket as well.
@@ -91,7 +93,7 @@ define([
 	Connection.prototype.publish = function(topic, data) {
 		data = data || {};
 		data.connection = this;
-		console.log('[connection:' + topic + ']', data);
+		window.console.log('[connection:' + topic + ']', data);
 		pubsub.publish('connection:' + topic, data);
 	};
 

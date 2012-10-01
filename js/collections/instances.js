@@ -3,6 +3,8 @@ define([
 	'models/instance',
 	'lib/store'
 ], function(Backbone, InstanceModel, Store) {
+	'use strict';
+
 	return new (Backbone.Collection.extend({
 		model: InstanceModel,
 		localStorage: new Store('instances'),

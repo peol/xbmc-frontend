@@ -4,6 +4,8 @@ define([
 	'views/remoteTouchView',
 	'views/remoteDesktopView'
 ], function($, Backbone, RemoteTouchView, RemoteDesktopView) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		initialize: function() {
 			this.subView = 'ontouchstart' in document ?
@@ -12,7 +14,7 @@ define([
 		},
 		render: function() {
 			this.$el.html(this.subView.render().el);
-			console.log('[remote:view] rendered');
+			window.console.log('[remote:view] rendered');
 			return this;
 		}
 	}));

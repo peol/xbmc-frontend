@@ -1,9 +1,10 @@
 define([
 	'Backbone',
 	'collections/instances',
-	'lib/pubsub',
-	'lib/connection'
-], function(Backbone, Instances, pubsub, conn) {
+	'lib/pubsub'
+], function(Backbone, Instances, pubsub) {
+	'use strict';
+
 	return (Backbone.Model.extend({
 		defaults: {
 			instance: null,

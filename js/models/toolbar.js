@@ -3,6 +3,8 @@ define([
 	'lodash',
 	'lib/pubsub'
 ], function(Backbone, _, pubsub) {
+	'use strict';
+
 	var items = [
 		{ label: 'Overview', view: 'overview' },
 		{ label: 'Remote', view: 'remote' },

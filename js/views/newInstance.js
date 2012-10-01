@@ -5,6 +5,8 @@ define([
 	'models/instance',
 	'hbs!tmpl/newInstance'
 ], function($, Backbone, Instances, InstanceModel, tmpl) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		events: {
 			'click button': 'save'
@@ -33,7 +35,7 @@ define([
 		},
 		render: function() {
 			this.$el.html(tmpl((new InstanceModel()).toJSON()));
-			console.log('[newInstance:view] rendered');
+			window.console.log('[newInstance:view] rendered');
 			return this;
 		}
 	}));

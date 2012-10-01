@@ -5,6 +5,8 @@ define([
 	'models/instance',
 	'hbs!tmpl/instanceList'
 ], function($, Backbone, Instances, InstanceModel, tmpl) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		events: {
 			'click .set-active': 'setActive',
@@ -22,7 +24,7 @@ define([
 		},
 		render: function(insts) {
 			this.$el.html(tmpl(Instances.toJSON()));
-			console.log('[instanceList:view] rendered');
+			window.console.log('[instanceList:view] rendered');
 			return this;
 		}
 	}));

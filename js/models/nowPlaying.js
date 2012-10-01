@@ -3,6 +3,8 @@ define([
 	'lib/pubsub',
 	'lib/xbmcapi'
 ], function(Backbone, pubsub, api) {
+	'use strict';
+
 	return (Backbone.Model.extend({
 		defaults: {
 			type: 'none',

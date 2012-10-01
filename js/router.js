@@ -9,6 +9,8 @@ define([
 	'models/overview',
 	'models/settings'
 ], function($, Backbone, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel, SettingsModel) {
+	'use strict';
+
 	var stage = $('#stage'),
 		switchView = function(model) {
 			stage.html(model.render().el);

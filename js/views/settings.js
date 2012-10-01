@@ -3,9 +3,10 @@ define([
 	'Backbone',
 	'models/instance',
 	'views/newInstance',
-	'views/instanceList'/*,
-	'hbs!tmpl/settings'*/
-], function($, Backbone, InstanceModel, NewInstanceView, InstanceListView, tmpl) {
+	'views/instanceList'
+], function($, Backbone, InstanceModel, NewInstanceView, InstanceListView) {
+	'use strict';
+
 	return (Backbone.View.extend({
 		initialize: function() {
 			this.instView = new NewInstanceView();
@@ -16,7 +17,7 @@ define([
 			this.$el.empty()
 				.append(this.instView.render().el)
 				.append(this.listView.render().el);
-			console.log('[settings:view] rendered');
+			window.console.log('[settings:view] rendered');
 			return this;
 		}
 	}));

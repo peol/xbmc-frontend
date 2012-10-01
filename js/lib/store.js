@@ -1,5 +1,7 @@
 define([
 ], function() {
+	'use strict';
+
 	function Store(prefix) {
 		this.prefix = prefix;
 	}
