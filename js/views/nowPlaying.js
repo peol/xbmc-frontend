@@ -1,14 +1,14 @@
 define([
 	'jquery',
-	'Backbone',
+	'views/base',
 	'hbs!tmpl/nowPlaying',
 	'hbs!tmpl/nowPlayingVideo',
 	'hbs!tmpl/nowPlayingEpisode',
 	'hbs!tmpl/nowPlayingMovie'
-], function($, Backbone, tmpl, tmplVideo, tmplEpisode, tmplMovie) {
+], function($, BaseView, tmpl, tmplVideo, tmplEpisode, tmplMovie) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		el: $('#nowPlaying'),
 		initialize: function() {
 			this.model.on('change', this.render, this);

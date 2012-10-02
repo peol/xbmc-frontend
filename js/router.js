@@ -1,6 +1,7 @@
 define([
 	'jquery',
 	'Backbone',
+	'lodash',
 	'lib/pubsub',
 	'views/overview',
 	'views/remote',
@@ -8,12 +9,17 @@ define([
 	'views/unknown',
 	'models/overview',
 	'models/settings'
-], function($, Backbone, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel, SettingsModel) {
+], function($, Backbone, _, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel, SettingsModel) {
 	'use strict';
 
-	var stage = $('#stage'),
-		switchView = function(model) {
-			stage.html(model.render().el);
+	var oldView = null,
+		stage = $('#stage'),
+		switchView = function(view) {
+			if (oldView && _.isFunction(oldView.destroy)) {
+				oldView.destroy();
+			}
+			oldView = view;
+			stage.html(view.render().el);
 		},
 		AppRouter = Backbone.Router.extend({
 			routes: {

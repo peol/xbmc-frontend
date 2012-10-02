@@ -1,13 +1,13 @@
 define([
 	'jquery',
-	'Backbone',
+	'views/base',
 	'collections/instances',
 	'models/instance',
 	'hbs!tmpl/instanceList'
-], function($, Backbone, Instances, InstanceModel, tmpl) {
+], function($, BaseView, Instances, InstanceModel, tmpl) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		events: {
 			'click .set-active': 'setActive',
 			'click .remove': 'remove'

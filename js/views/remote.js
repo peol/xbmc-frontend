@@ -1,12 +1,11 @@
 define([
-	'jquery',
-	'Backbone',
+	'views/base',
 	'views/remoteTouchView',
 	'views/remoteDesktopView'
-], function($, Backbone, RemoteTouchView, RemoteDesktopView) {
+], function(BaseView, RemoteTouchView, RemoteDesktopView) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		initialize: function() {
 			this.subView = 'ontouchstart' in document ?
 				new RemoteTouchView():

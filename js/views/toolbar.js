@@ -1,11 +1,11 @@
 define([
 	'jquery',
-	'Backbone',
+	'views/base',
 	'hbs!tmpl/toolbar'
-], function($, Backbone, tmpl) {
+], function($, BaseView, tmpl) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		el: $('#toolbar'),
 		initialize: function() {
 			this.model.on('change', this.render, this);

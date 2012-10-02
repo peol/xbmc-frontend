@@ -1,11 +1,11 @@
 define([
-	'jquery',
 	'Backbone',
+	'views/base',
 	'hbs!tmpl/unknown'
-], function($, Backbone, tmpl) {
+], function(Backbone, BaseView, tmpl) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		render: function() {
 			this.$el.html(tmpl({ route: Backbone.history.fragment }));
 			window.console.log('[unknown:view] rendered');

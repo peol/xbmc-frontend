@@ -1,11 +1,10 @@
 define([
-	'jquery',
-	'Backbone',
+	'views/base',
 	'hbs!tmpl/overview'
-], function($, Backbone, tmpl) {
+], function(BaseView, tmpl) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		initialize: function() {
 			this.model.on('change', this.render, this);
 		},

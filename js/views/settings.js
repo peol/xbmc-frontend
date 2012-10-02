@@ -1,13 +1,12 @@
 define([
-	'jquery',
-	'Backbone',
+	'views/base',
 	'models/instance',
 	'views/newInstance',
 	'views/instanceList'
-], function($, Backbone, InstanceModel, NewInstanceView, InstanceListView) {
+], function(BaseView, InstanceModel, NewInstanceView, InstanceListView) {
 	'use strict';
 
-	return (Backbone.View.extend({
+	return (BaseView.extend({
 		initialize: function() {
 			this.instView = new NewInstanceView();
 			this.listView = new InstanceListView();
