@@ -2,11 +2,7 @@
 #nowPlaying {
 	background: #f5f5f5;
 	border-top: 1px solid #ddd;
-	height: 120px;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	padding: 12px;
+	padding: 6px;
 	overflow: auto;
 }
 

@@ -1,10 +1,17 @@
 /* #toolbar styles here */
 #toolbar {
-	overflow: auto;
-	width: 100%;
-	line-height: 42px;
+	overflow: hidden;
+	line-height: 44px;
 	background: #f5f5f5;
-	border-bottom: 1px solid #ddd;
+}
+
+#toolbar:after {
+	width: 100%;
+	height: 44px;
+	display: block;
+	clear: both;
+	content: "";
+	box-shadow: 0 0 18px rgba(0, 0, 0, 0.1);
 }
 
 #toolbar h1 {
@@ -12,12 +19,13 @@
 	float: left;
 }
 
-#toolbar nav { float: right; }
-#toolbar ul { margin: 0; }
-
-#toolbar li {
-	display: inline-block;
+#toolbar nav {
+	float: right;
+	line-height: 46px;
 }
+
+#toolbar ul { margin: 0; }
+#toolbar li { display: inline-block; }
 
 #toolbar li a {
 	color: #049;
@@ -29,11 +37,4 @@
 #toolbar .selected a {
 	color: #000;
 	background: #fff;
-	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-@media all and (max-width: 480px) {
-	#toolbar li a {
-		font-size: 90%;
-	}
 }

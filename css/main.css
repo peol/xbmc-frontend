@@ -1,9 +1,11 @@
 /* we're using @import to enable concatenation and minification by r.js */
 @import 'reset.css';
 @import 'base.css';
+@import 'stage.css';
 @import 'toolbar.css';
 @import 'nowPlaying.css';
 @import 'overview.css';
 @import 'newInstance.css';
 @import 'instanceList.css';
 @import 'settings.css';
+@import 'remoteTouch.css';

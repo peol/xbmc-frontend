@@ -1,0 +1,5 @@
+.view-remote-touch {
+background: -webkit-radial-gradient(50% 50%, circle, #ccc, #fff);
+	/*background-image: -webkit-radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));*/
+	height: 100%;
+}
