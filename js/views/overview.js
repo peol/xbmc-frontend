@@ -6,6 +6,7 @@ define([
 
 	return (BaseView.extend({
 		initialize: function() {
+			this.$el.addClass('view-overview');
 			this.model.on('change', this.render, this);
 		},
 		render: function() {

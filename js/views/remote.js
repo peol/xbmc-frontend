@@ -7,7 +7,7 @@ define([
 
 	return (BaseView.extend({
 		initialize: function() {
-			this.subView = 'ontouchstart' in document ?
+			this.subView = ('ontouchstart' in document) ?
 				new RemoteTouchView():
 				new RemoteDesktopView();
 		},
