@@ -10,7 +10,7 @@ define([
 				this.model.off(null, null, this);
 			}
 			pubsub.unsubscribe(null, null, this);
-			this.$el.remove();
+			this.remove();
 		}
 	}));
 });
