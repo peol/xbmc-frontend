@@ -80,8 +80,11 @@ define([
                !!process.versions.node) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
-        fetchText = function (path, callback) {
-            callback(fs.readFileSync(path, 'utf8'));
+        fetchText = function ( path, callback ) {
+            var body = fs.readFileSync(path, 'utf8') || "";
+            // we need to remove BOM stuff from the file content
+            body = body.replace(/^\uFEFF/, '');
+            callback(body);
         };
     } else if (typeof java !== "undefined" && typeof java.io !== "undefined") {
         fetchText = function(path, callback) {
@@ -165,7 +168,7 @@ define([
               var statement, res, test;
               if ( nodes && nodes.statements ) {
                 statement = nodes.statements[0];
-                if ( statement.type === "comment" ) {
+                if ( statement && statement.type === "comment" ) {
                   try {
                     res = ( statement.comment ).replace(new RegExp('^[\\s]+|[\\s]+$', 'g'), '');
                     test = JSON.parse(res);
@@ -428,6 +431,10 @@ define([
                     parentRequire([compiledName], function (value) {
                       load(value);
                     });
+                  }
+
+                  if ( config.removeCombined ) {
+                    fs.unlinkSync(path);
                   }
               });
             }
