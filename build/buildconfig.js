@@ -4,7 +4,17 @@
 	dir: '../target',
 	removeCombined: true,
 	mainConfigFile: '../js/main.js',
-	fileExclusionRegExp: /examples|test|demo|vendor|build|docs|dist|^r\.js$|(\.|-)min\.js$/i,
+	fileExclusionRegExp: new RegExp(
+		// ignore build dir
+		"build" +
+		// ignore r.js
+		"|^r\\.js§" +
+		// ignore .md files
+		"|\\.md$" +
+		// ignore .dotfiles
+		"|^\\.",
+		"i"
+	),
 	modules: [{
 		name: "main"
 	}]

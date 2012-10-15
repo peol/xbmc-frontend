@@ -1,1 +1,3 @@
-node ../js/components/hbs/r.js -o buildconfig.js 
+node ../js/vendor/requirejs/r.js -o buildconfig.js 
+# clean up production dir
+rm -rf ../target/js/tmpl

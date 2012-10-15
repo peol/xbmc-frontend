@@ -3,17 +3,16 @@ require.config({
 		disableI18n: true
 	},
 	paths: {
-		"jquery": "components/jquery/jquery",
-		"BackboneLib": "components/backbone/backbone",
-		"lodash": "components/lodash/lodash",
-		"text": "components/text/text",
-		/* hbs (underscore, i18n, json2 will not be included in production) */
-		"hbs": "components/hbs/hbs",
-		"handlebars": "components/hbs/Handlebars",
-		"underscore": "components/hbs/hbs/underscore",
-		"i18nprecompile": "components/hbs/hbs/i18nprecompile",
-		"json2": "components/hbs/hbs/json2"
-		/* /hbs */
+		"jquery": "vendor/jquery/jquery",
+		"BackboneLib": "vendor/backbone/backbone",
+		"lodash": "vendor/lodash/lodash",
+		"hbs": "vendor/hbs/hbs",
+		/* hbs deps (none except handlebars will be included in production): */
+		"handlebars": "vendor/hbs/Handlebars",
+		"i18nprecompile": "vendor/hbs/hbs/i18nprecompile",
+		"text": "vendor/requirejs/text",
+		"underscore": "vendor/hbs/hbs/underscore",
+		"json2": "vendor/hbs/hbs/json2"
 	},
 	shim: {
 		"BackboneLib": ["lodash", "jquery"]
