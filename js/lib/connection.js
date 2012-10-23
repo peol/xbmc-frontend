@@ -1,3 +1,4 @@
+/*global define*/
 define([
 	'lib/pubsub'
 ], function(pubsub) {

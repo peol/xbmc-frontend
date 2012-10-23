@@ -1,3 +1,4 @@
+/*global require, define, Backbone*/
 require.config({
 	hbs: {
 		disableI18n: true

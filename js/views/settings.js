@@ -1,3 +1,4 @@
+/*global define*/
 define([
 	'views/base',
 	'models/instance',

@@ -1,3 +1,4 @@
+/*global define*/
 define([
 	'lib/connection',
 	'lib/xbmcapi',

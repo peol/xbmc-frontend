@@ -1,0 +1,17 @@
+{
+	"name": "xbmc-frontend",
+	"version": "0.1.0pre",
+	"description": "A simple, lean, touch-friendly front-end for controlling XBMC",
+	"author": {
+		"name": "Andrée Hansson",
+		"email": "peolanha@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/peol/xbmc-frontend"
+	},
+	"dependencies": {
+		"grunt": "0.3.x",
+		"grunt-requirejs": "0.2.x"
+	}
+}
