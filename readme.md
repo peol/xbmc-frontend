@@ -6,3 +6,12 @@ To use this, you need to run a frodo-ish version of XBMC (latest nightly should 
 When you have xbmc-frontend up and running, go into the "Settings" tab and add your instance(s) to boot it up.
 
 The XBMC RPC call API can be found at: http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v5
+
+# Building xbmc-frontend
+You'll need node and npm installed in your path, then, just follow these steps:
+
+```
+$ cd xbmc-frontend
+$ npm install
+$ grunt [lint|requirejs]
+```
