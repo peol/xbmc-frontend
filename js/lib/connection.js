@@ -75,7 +75,7 @@ define([
 	 * @triggers connection:error If it failed to destroy the connection without issues
 	 * @param {string} why An optional reason why it's closing
 	 */
-	Connection.prototype.close = function(why) {
+	Connection.prototype.close = function(/*why*/) {
 		try {
 			this.socket.close();
 		} catch(err) {
@@ -105,7 +105,7 @@ define([
 	 * @private
 	 */
 	Connection.prototype.onOpen = function(evt) {
-		this.publish('open', this.uri);
+		this.publish('open', evt);
 		this.sendQueue.forEach(function(item) {
 			this.send.apply(this, item);
 		}.bind(this));

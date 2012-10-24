@@ -51,7 +51,7 @@ define([
 		 * @event api:playerStopped A pubsub publish to notify that the XBMC player has stopped.
 		 * @param {Object} data Data received from the socket/XBMC.
 		 */
-		'Player.OnStop': function(data) {
+		'Player.OnStop': function(/*data*/) {
 			pubsub.publish('api:playerStopped');
 		},
 		/**

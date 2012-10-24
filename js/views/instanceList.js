@@ -23,7 +23,7 @@ define([
 			Instances.remove(Instances.at(index));
 			this.render();
 		},
-		render: function(insts) {
+		render: function() {
 			this.$el.html(tmpl(Instances.toJSON()));
 			window.console.log('[instanceList:view] rendered');
 			return this;

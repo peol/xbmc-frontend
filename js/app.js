@@ -7,9 +7,8 @@ define([
 	'views/nowPlaying',
 	'models/nowPlaying',
 	'collections/instances',
-	'lib/pubsub',
 	'router'
-], function(Connection, api, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances, pubsub) {
+], function(Connection, api, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances) {
 	'use strict';
 
 	(new ToolbarView({ model: new ToolbarModel() })).render();
