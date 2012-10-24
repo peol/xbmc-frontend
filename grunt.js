@@ -19,7 +19,6 @@ module.exports = function(grunt) {
 			tasks: 'lint'
 		},
 		server: {
-			async: true,
 			build: {
 				base: './target/',
 				async: true
@@ -69,6 +68,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-requirejs');
 	grunt.loadTasks('tasks');
 	grunt.registerTask('default', 'lint requirejs');
-	grunt.registerTask('run', 'lint server');
+	grunt.registerTask('run', 'lint server watch');
 	grunt.registerTask('run-build', 'default server:build');
 };

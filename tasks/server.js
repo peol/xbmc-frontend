@@ -1,13 +1,15 @@
+/*global module, require*/
 module.exports = function(grunt) {
 	var connect = require('connect');
 	var path = require('path');
 
-	grunt.registerMultiTask('server', 'Run a static server', function() {
+	grunt.registerTask('server', 'Run a static server', function() {
 		var options;
-		var tmp = grunt.config(['server', this.target]);
+		var target = this.args[0] || '';
+		var tmp = grunt.config(['server', target]);
 
 		if (typeof tmp === 'object') {
-			grunt.verbose.writeln('Using "' + this.target + '" server.');
+			grunt.verbose.writeln('Using "' + target + '" server.');
 			options = tmp;
 		} else {
 			grunt.verbose.writeln('Using default server.');
@@ -31,7 +33,7 @@ module.exports = function(grunt) {
 		}
 
 		// Start server.
-		grunt.log.writeln('Starting static web server on port ' + port + '.');
+		grunt.log.writeln('Starting static web server on port ' + port + (target ? ', target "' + target + '"' : '' ) + '.');
 		var connection = connect.apply(null, middleware).listen(port);
 
 		if (options.async) {
