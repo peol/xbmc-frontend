@@ -12,11 +12,18 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
 		},
 		lint: {
-			files: ['grunt.js', 'js/!(vendor)/*.js']
+			files: ['grunt.js', 'js/!(vendor)/**.js', 'js/*.js']
 		},
 		watch: {
 			files: '<config:lint.files>',
 			tasks: 'lint'
+		},
+		server: {
+			async: true,
+			build: {
+				base: './target/',
+				async: true
+			}
 		},
 		requirejs: {
 			appDir: './',
@@ -27,6 +34,8 @@ module.exports = function(grunt) {
 			fileExclusionRegExp: new RegExp(
 				// ignore build dir
 				"build" +
+				// ignore node_modules
+				"|node_modules" +
 				// ignore r.js
 				"|^r\\.js§" +
 				// ignore .md files
@@ -52,17 +61,14 @@ module.exports = function(grunt) {
 				boss: true,
 				eqnull: true,
 				browser: true
-			},
-			globals: {
-				jQuery: true
 			}
 		},
 		uglify: {}
 	});
 
 	grunt.loadNpmTasks('grunt-requirejs');
-
-	// Default task.
+	grunt.loadTasks('tasks');
 	grunt.registerTask('default', 'lint requirejs');
-
+	grunt.registerTask('run', 'lint server');
+	grunt.registerTask('run-build', 'default server:build');
 };
