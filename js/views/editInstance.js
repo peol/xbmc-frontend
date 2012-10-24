@@ -13,7 +13,7 @@ define([
 			'click button': 'save'
 		},
 		save: function() {
-			var inst = new InstanceModel(),
+			var inst = this.model,
 				label = this.$el.find('.label').val(),
 				host = this.$el.find('.host').val(),
 				port = +this.$el.find('.port').val();
@@ -31,11 +31,12 @@ define([
 			}
 
 			Instances.add(inst);
-			this.$el.find('input').val('');
 			this.trigger('saved');
+			this.model = new InstanceModel();
+			this.render();
 		},
 		render: function() {
-			this.$el.html(tmpl((new InstanceModel()).toJSON()));
+			this.$el.html(tmpl(this.model.toJSON()));
 			window.console.log('[editInstance:view] rendered');
 			return this;
 		}
