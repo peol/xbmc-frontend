@@ -30,15 +30,16 @@ module.exports = function(grunt) {
 			dir: './target',
 			removeCombined: true,
 			mainConfigFile: './js/main.js',
+			useStrict: true,
 			fileExclusionRegExp: new RegExp(
-				// ignore build dir
-				"build" +
-				// ignore node_modules
-				"|node_modules" +
-				// ignore r.js
-				"|^r\\.js§" +
+				// ignore node_modules, tasks dirs
+				"^(node_modules|tasks)$" +
+				// ignore r.js, grunt.js
+				"|^(grunt|r)\\.js$" +
 				// ignore .md files
 				"|\\.md$" +
+				// ignore .json files
+				"|\\.json$" +
 				// ignore .dotfiles
 				"|^\\.",
 				"i"
