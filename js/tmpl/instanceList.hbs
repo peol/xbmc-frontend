@@ -4,9 +4,10 @@
 {{/unless}}
 {{#each this}}
 	<li class="{{isActive}}">
-		<a class="remove">[remove]</a>
-		<a class="set-active">[set active]</a>
 		{{label}} ({{host}}:{{port}})
+		<a class="set-active">[set active]</a>
+		<a class="edit">[edit]</a>
+		<a class="remove">[remove]</a>
 	</li>
 {{/each}}
 </ul>

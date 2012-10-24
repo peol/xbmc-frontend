@@ -4,7 +4,7 @@ define([
 	'views/base',
 	'collections/instances',
 	'models/instance',
-	'hbs!tmpl/newInstance'
+	'hbs!tmpl/editInstance'
 ], function($, BaseView, Instances, InstanceModel, tmpl) {
 	'use strict';
 
@@ -36,7 +36,7 @@ define([
 		},
 		render: function() {
 			this.$el.html(tmpl((new InstanceModel()).toJSON()));
-			window.console.log('[newInstance:view] rendered');
+			window.console.log('[editInstance:view] rendered');
 			return this;
 		}
 	}));

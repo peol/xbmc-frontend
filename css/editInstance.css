@@ -1,0 +1,23 @@
+.editInstance {
+	float: left;
+}
+
+.editInstance li {
+	list-style: none;
+	margin: 0 0 4px;
+	overflow: auto;
+	width: 280px;
+}
+
+.editInstance label {
+	text-align: right;
+	display: block;
+}
+
+.editInstance input {
+	margin-left: 12px;
+}
+
+.editInstance button {
+	float: right;
+}

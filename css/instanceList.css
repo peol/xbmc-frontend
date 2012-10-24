@@ -3,6 +3,10 @@
 	list-style: none;
 }
 
-.instanceList .true {
-	color: red;
+.instanceList .true:before {
+	font-size: 16px;
+	line-height: 1;
+	content: "→";
+	position: absolute;
+	margin-left: -18px;
 }

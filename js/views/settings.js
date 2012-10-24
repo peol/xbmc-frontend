@@ -2,14 +2,14 @@
 define([
 	'views/base',
 	'models/instance',
-	'views/newInstance',
+	'views/editInstance',
 	'views/instanceList'
-], function(BaseView, InstanceModel, NewInstanceView, InstanceListView) {
+], function(BaseView, InstanceModel, EditInstanceView, InstanceListView) {
 	'use strict';
 
 	return (BaseView.extend({
 		initialize: function() {
-			this.instView = new NewInstanceView();
+			this.instView = new EditInstanceView();
 			this.listView = new InstanceListView();
 			this.instView.on('saved', this.listView.render, this.listView);
 		},
