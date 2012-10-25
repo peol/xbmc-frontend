@@ -1,5 +1,5 @@
 /**
- * @license handlebars hbs 0.2.1 - Alex Sexton, but Handlebars has it's own licensing junk
+ * @license handlebars hbs 0.4.0 - Alex Sexton, but Handlebars has it's own licensing junk
  *
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/require-cs for details on the plugin this was based off of
@@ -130,7 +130,7 @@ define([
             }
         },
 
-        version: '1.0.3beta',
+        version: '0.4.0',
 
         load: function (name, parentRequire, load, config) {
           //>>excludeStart('excludeHbs', pragmas.excludeHbs)
@@ -222,7 +222,7 @@ define([
                     res.push(prefix + statement.id.string);
                   }
 
-                  var paramsWithoutParts = ['this', '.', '..'];
+                  var paramsWithoutParts = ['this', '.', '..', './..', '../..', '../../..'];
 
                   // grab the params
                   if ( statement.params ) {
@@ -252,6 +252,9 @@ define([
                 // if it's a whole new program
                 if ( statement && statement.program && statement.program.statements ) {
                   sideways = recursiveVarSearch([statement.mustache],[], "", helpersres)[0] || "";
+                  if ( statement.program.inverse && statement.program.inverse.statements ) {
+                    recursiveVarSearch( statement.program.inverse.statements, res, prefix + newprefix + (sideways ? (prefix+newprefix) ? "."+sideways : sideways : ""), helpersres);
+                  }
                   recursiveVarSearch( statement.program.statements, res, prefix + newprefix + (sideways ? (prefix+newprefix) ? "."+sideways : sideways : ""), helpersres);
                 }
               });
@@ -412,23 +415,23 @@ define([
 
                   if ( !config.isBuild ) {
                     require( deps, function (){
-                      load.fromText(compiledName, text);
+                      load.fromText(text);
 
                       //Give result to load. Need to wait until the module
                       //is fully parse, which will happen after this
                       //execution.
-                      parentRequire([compiledName], function (value) {
+                      parentRequire([name], function (value) {
                         load(value);
                       });
                     });
                   }
                   else {
-                    load.fromText(compiledName, text);
+                    load.fromText(text);
 
                     //Give result to load. Need to wait until the module
                     //is fully parse, which will happen after this
                     //execution.
-                    parentRequire([compiledName], function (value) {
+                    parentRequire([name], function (value) {
                       load(value);
                     });
                   }

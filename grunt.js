@@ -25,28 +25,30 @@ module.exports = function(grunt) {
 			}
 		},
 		requirejs: {
-			appDir: './',
-			baseUrl: 'js/',
-			dir: './target',
-			removeCombined: true,
-			mainConfigFile: './js/main.js',
-			useStrict: true,
-			fileExclusionRegExp: new RegExp(
-				// ignore node_modules, tasks dirs
-				"^(node_modules|tasks)$" +
-				// ignore r.js, grunt.js
-				"|^(grunt|r)\\.js$" +
-				// ignore .md files
-				"|\\.md$" +
-				// ignore .json files
-				"|\\.json$" +
-				// ignore .dotfiles
-				"|^\\.",
-				"i"
-			),
-			modules: [{
-				name: "main"
-			}]
+			options: {
+				appDir: './',
+				baseUrl: 'js/',
+				dir: './target',
+				removeCombined: true,
+				mainConfigFile: './js/main.js',
+				useStrict: true,
+				fileExclusionRegExp: new RegExp(
+					// ignore node_modules, tasks dirs
+					"^(node_modules|tasks)$" +
+					// ignore r.js, grunt.js
+					"|^(grunt|r)\\.js$" +
+					// ignore .md files
+					"|\\.md$" +
+					// ignore .json files
+					"|\\.json$" +
+					// ignore .dotfiles
+					"|^\\.",
+					"i"
+				),
+				modules: [{
+					name: "main"
+				}]
+			}
 		},
 		jshint: {
 			options: {
@@ -67,7 +69,7 @@ module.exports = function(grunt) {
 		uglify: {}
 	});
 
-	grunt.loadNpmTasks('grunt-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadTasks('tasks');
 	grunt.registerTask('default', 'lint requirejs');
 	grunt.registerTask('run', 'lint server watch');

@@ -12,7 +12,7 @@
 	},
 	"dependencies": {
 		"grunt": "0.3.x",
-		"grunt-requirejs": "0.2.x",
+		"grunt-contrib-requirejs": "0.3.x",
 		"connect": "2.6.x"
 	}
 }
