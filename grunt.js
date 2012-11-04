@@ -32,6 +32,11 @@ module.exports = function(grunt) {
 				removeCombined: true,
 				mainConfigFile: './js/main.js',
 				useStrict: true,
+				pragmasOnSave: {
+					excludeHbsParser : true,
+					excludeHbs: true,
+					excludeAfterBuild: true
+				},
 				fileExclusionRegExp: new RegExp(
 					// ignore node_modules, tasks dirs
 					"^(node_modules|tasks)$" +
