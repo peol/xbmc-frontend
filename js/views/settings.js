@@ -19,7 +19,7 @@ define([
 			this.instView.on('saved', this.listView.render, this.listView);
 		},
 		edit: function(e) {
-			var index = $(e.target).closest('li').index();
+			var index = $(e.target).closest('tr').index();
 			this.instView.setModel(Instances.at(index));
 		},
 		render: function() {

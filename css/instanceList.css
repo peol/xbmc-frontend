@@ -1,12 +1,13 @@
 .instanceList {
 	float: left;
-	list-style: none;
+	padding: 8px;
 }
 
-.instanceList .true:before {
-	font-size: 16px;
-	line-height: 1;
-	content: "→";
-	position: absolute;
-	margin-left: -18px;
+.instanceList td {
+	padding: 6px;
+}
+
+.instanceList .true {
+	background: green;
+	color: white;
 }

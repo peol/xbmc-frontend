@@ -1,13 +1,19 @@
-<ul class="instanceList">
-{{#unless this.length}}
-	<li>No instances.</li>
-{{/unless}}
-{{#each this}}
-	<li class="{{isActive}}">
-		{{label}} ({{host}}:{{port}})
-		<a class="set-active">[set active]</a>
-		<a class="edit">[edit]</a>
-		<a class="remove">[remove]</a>
-	</li>
-{{/each}}
-</ul>
+<div class="instanceList">
+{{#if this.length}}
+	<table>
+	{{#each this}}
+		<tr class="{{isActive}}">
+			<td>{{label}}</td>
+			<td>{{host}}:{{port}}</td>
+			<td>
+				<a class="set-active">[set active]</a>
+				<a class="edit">[edit]</a>
+				<a class="remove">[remove]</a>
+			</td>
+		</tr>
+	{{/each}}
+	</table>
+{{else}}
+	<p>No instances.</p>
+{{/if}}
+</div>

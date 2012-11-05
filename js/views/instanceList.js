@@ -14,12 +14,12 @@ define([
 			'click .remove': 'remove'
 		},
 		setActive: function(e) {
-			var index = $(e.target).closest('li').index();
+			var index = $(e.target).closest('tr').index();
 			Instances.setActive(index);
 			this.render();
 		},
 		remove: function(e) {
-			var index = $(e.target).closest('li').index();
+			var index = $(e.target).closest('tr').index();
 			Instances.remove(Instances.at(index));
 			this.render();
 		},
