@@ -10,16 +10,17 @@ define([
 			label: 'New XBMC Instance',
 			host: '127.0.0.1',
 			port: 9090,
-			isActive: false
+			isActive: false,
+			isConnected: false
 		},
 		initialize: function() {
 			pubsub.subscribe('connection:open', this.setConnected, this);
 		},
-		setConnected: function(uri) {
-			this._isConnected = uri === this.toString();
+		setConnected: function(evt) {
+			this.set('isConnected', evt.uri === this.toString());
 		},
 		isConnected: function() {
-			return this._isConnected;
+			return this.get('isConnected');
 		},
 		toString: function() {
 			return 'ws://' + this.get('host') + ':' + this.get('port') + '/jsonrpc';

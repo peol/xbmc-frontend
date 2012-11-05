@@ -105,6 +105,7 @@ define([
 	 * @private
 	 */
 	Connection.prototype.onOpen = function(evt) {
+		evt.uri = this.uri;
 		this.publish('open', evt);
 		this.sendQueue.forEach(function(item) {
 			this.send.apply(this, item);

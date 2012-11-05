@@ -1,9 +1,8 @@
 /*global define*/
 define([
 	'Backbone',
-	'collections/instances',
-	'lib/pubsub'
-], function(Backbone, Instances, pubsub) {
+	'collections/instances'
+], function(Backbone, Instances) {
 	'use strict';
 
 	return (Backbone.Model.extend({
@@ -13,12 +12,9 @@ define([
 		},
 		initialize: function() {
 			this.update();
-			pubsub.subscribe('all', this.update, this);
+			Instances.on('save', this.update, this);
 		},
-		update: function(evtName) {
-			if (evtName && evtName.indexOf('connection:') !== 0) {
-				return;
-			}
+		update: function() {
 			var inst = Instances.getActive();
 			if (inst) {
 				this.set({
