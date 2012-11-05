@@ -16,6 +16,10 @@ define([
 			this.$el.html(this.subView.render().el);
 			window.console.log('[remote:view] rendered');
 			return this;
+		},
+		destroy: function() {
+			this.subView.destroy();
+			BaseView.prototype.destroy.apply(this, arguments);
 		}
 	}));
 });

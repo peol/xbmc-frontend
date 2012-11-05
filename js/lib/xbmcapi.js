@@ -223,6 +223,7 @@ define([
 
 	return {
 		setConnection: setConnection,
-		sendNotification: sendNotification
+		sendNotification: sendNotification,
+		send: send
 	};
 });

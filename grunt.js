@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 				mainConfigFile: './js/main.js',
 				useStrict: true,
 				pragmasOnSave: {
-					excludeHbsParser : true,
+					excludeHbsParser: true,
 					excludeHbs: true,
 					excludeAfterBuild: true
 				},
@@ -70,8 +70,7 @@ module.exports = function(grunt) {
 				eqnull: true,
 				browser: true
 			}
-		},
-		uglify: {}
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
