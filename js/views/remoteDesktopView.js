@@ -53,21 +53,15 @@ define([
 			// c
 			67: curry('Input.ContextMenu'),
 			// +
-			187: function() {
-				execAction('volumeup');
-			},
+			187: function() { execAction('volumeup'); },
 			// -
-			189: function() {
-				execAction('volumedown');
-			}
+			189: function() { execAction('volumedown'); }
 		},
 		// inputActions are specific to when the user tries to input text,
 		// key codes are from the keypress event
 		inputActions = {
 			// backspace
-			8: function() {
-				execAction('backspace');
-			}
+			8: function() { execAction('backspace'); }
 		};
 
 	$.extend(inputActions, globalActions);
@@ -83,12 +77,9 @@ define([
 				// we only work with clean key strokes
 				return;
 			}
-
-			if (e.type === 'keydown') {
-				if (_.isFunction(action)) {
-					e.preventDefault();
-					action();
-				}
+			else if (e.type === 'keydown' && _.isFunction(action)) {
+				e.preventDefault();
+				action();
 			} else if (this.inputFocused) {
 				// send raw text
 				// TODO: For every API call to SendText, XBMC replaces all previous
