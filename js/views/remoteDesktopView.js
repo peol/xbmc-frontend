@@ -27,6 +27,7 @@ define([
 	}
 
 	var body = $(document.body),
+		cache = [],
 		// globalActions are actions that are always available to the user,
 		// key codes are from the keydown event
 		globalActions = {
@@ -80,23 +81,40 @@ define([
 			else if (e.type === 'keydown' && _.isFunction(action)) {
 				e.preventDefault();
 				action();
-			} else if (this.inputFocused) {
+				if (e.which === 8 && this.inputFocused) {
+					// deleting text
+					cache.pop();
+				}
+			} else if (this.inputFocused && e.type === 'keypress') {
 				// send raw text
 				// TODO: For every API call to SendText, XBMC replaces all previous
 				//       text in the input area, we need to always send the full text entered
-				api.send('Input.SendText', {
-					method: 'Input.SendText',
-					params: {
-						text: String.fromCharCode(e.which),
-						done: false
-					}});
+
+				if (e.which !== 13) {
+					cache.push(String.fromCharCode(e.which));
+					api.send('Input.SendText', {
+						method: 'Input.SendText',
+						params: {
+							text: cache.join(''),
+							done: false
+						}});
+				} else {
+					api.send('Input.SendText', {
+						method: 'Input.SendText',
+						params: {
+							text: cache.join(''),
+							done: true
+						}});
+				}
 			}
 		},
 		toggleInputMode: function(data) {
 			if (!this.inputFocused && data.method === 'Input.OnInputRequested') {
 				this.inputFocused = true;
+				cache = [];
 			}else if (this.inputFocused && data.method === 'Input.OnInputFinished') {
 				this.inputFocused = false;
+				cache = [];
 			}
 		},
 		render: function() {

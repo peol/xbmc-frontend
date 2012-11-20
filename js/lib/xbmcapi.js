@@ -4,7 +4,15 @@ define([
 ], function(pubsub) {
 	'use strict';
 
-	var _connection, handlers = {
+	// TODO: Rewrite this module, it's crap
+
+	var
+	_connection,
+	/**
+	 * Built-in handlers for common JSON-RPC calls/notifications, each key corresponds
+	 * to the method name in the API.
+	 */
+	handlers = {
 		/**
 		 * If any players are active, we need to get additional information
 		 * about what it's playing.
@@ -213,7 +221,7 @@ define([
 	 */
 	function scrubData(data) {
 		if (data.thumbnail) {
-			data.thumbnail = decodeURIComponent(data.thumbnail.replace(/^image:\/\//ig, ''));
+			data.thumbnail = decodeURIComponent(data.thumbnail.replace(/^image:\/\/|\/$/ig, ''));
 		}
 		return data;
 	}

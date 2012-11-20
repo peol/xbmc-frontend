@@ -7,22 +7,25 @@ define([
 	/**
 	 * Creates a new connection, if URI is specified, it should
 	 * bootstrap and open the websocket as well.
-	 * @constructor
-	 * @param {string} uri Optional URI, passed into Connection#create
+	 *
+	 * @exports Connection
+	 * 
+	 * @param {String} uri (optional) URI, passed into Connection#create
 	 */
-	function Connection(uri) {
+	var Connection = function(uri) {
 		this.sendQueue = [];
 		if (uri) {
 			this.create(uri);
 		}
-	}
+	};
 
 	/**
-	 * Connection#create is used to actually open up a connection, can
-	 * be used separately to delay connection attempts (if no URI is sent
-	 * to the constructor).
-	 * @throws {error} If URI is missing
-	 * @param {string} uri The URI to connect to
+	 * Used to actually open up a connection, can be used separately to delay connection
+	 * attempts (if no URI is sent to the constructor).
+	 * 
+	 * @throws {Error} If URI is missing
+	 * 
+	 * @param {String} uri The URI to connect to
 	 */
 	Connection.prototype.create = function(uri) {
 		if (!uri) {
@@ -38,19 +41,21 @@ define([
 	};
 
 	/**
-	 * Connection#isActive is used to determine if the socket is open for
-	 * business.
-	 * @returns {bool} Whether the socket is open
+	 * Used to determine if the socket is open for business.
+	 * 
+	 * @returns {Boolean} Whether the socket is open
 	 */
 	Connection.prototype.isActive = function() {
 		return this.socket && this.socket.readyState === WebSocket.OPEN;
 	};
 
 	/**
-	 * Connection#send is used to send JSON-RPC calls through the socket.
-	 * @throws {error} If arguments are missing
-	 * @triggers connection:send The stringified data that are being sent
-	 * @param {string} id The unique ID to tie this request to the response
+	 * Used to send JSON-RPC calls through the socket.
+	 * 
+	 * @throws {Error} If arguments are missing
+	 * @fires connection:send The stringified data that are being sent
+	 * 
+	 * @param {String} id The unique ID to tie this request to the response
 	 * @param {Object} data The data needed to do the JSON-RPC call
 	 */
 	Connection.prototype.send = function(id, data) {
@@ -71,11 +76,11 @@ define([
 	};
 
 	/**
-	 * Connection#close is used to destroy the connection.
-	 * @triggers connection:error If it failed to destroy the connection without issues
-	 * @param {string} why An optional reason why it's closing
+	 * Used to destroy the connection, effectively kills the websocket.
+	 * 
+	 * @fires connection:error If it failed to destroy the connection without issues
 	 */
-	Connection.prototype.close = function(/*why*/) {
+	Connection.prototype.close = function() {
 		try {
 			this.socket.close();
 		} catch(err) {
@@ -85,11 +90,12 @@ define([
 	};
 
 	/**
-	 * Connection#publish Can be used to emit a topic to the system from a
-	 * specific connection.
-	 * @param {string} topic The unprefixed topic to emit
-	 * @param {object} The data to publish
-	 * @triggers connection:<topic>
+	 * Can be used to emit a topic to the system from a specific connection.
+	 * 
+	 * @fires connection:<topic>
+	 * 
+	 * @param {String} topic The unprefixed topic to emit
+	 * @param {Object} data The data to publish
 	 */
 	Connection.prototype.publish = function(topic, data) {
 		data = data || {};
@@ -99,10 +105,10 @@ define([
 	};
 
 	/**
-	 * Connection#onOpen Triggered from the socket when it has been
-	 * successfully opened.
-	 * @triggers connection:open
+	 * Triggered from the socket when it has been successfully opened.
+	 * 
 	 * @private
+	 * @fires connection:open
 	 */
 	Connection.prototype.onOpen = function(evt) {
 		evt.uri = this.uri;
@@ -114,32 +120,33 @@ define([
 	};
 
 	/**
-	 * Connection#onOpen Triggered from the socket when an error has been
-	 * noticed. Also triggered internally when the JSON-RPC response contains
+	 * Triggered from the socket when an error has occurred. Reused by @see Connection#onClose
+	 * if it can't close properly. Also triggered internally when the JSON-RPC response contains
 	 * an error object.
-	 * @triggers connection:error
+	 * 
 	 * @private
+	 * @fires connection:error
 	 */
 	Connection.prototype.onError = function(evt) {
 		this.publish('error', evt);
 	};
 
 	/**
-	 * Connection#onClose Triggered from the socket when the socket has been
-	 * closed.
-	 * @triggers connection:close
+	 * Triggered from the socket when the socket has been closed.
+	 * 
 	 * @private
+	 * @fires connection:close
 	 */
 	Connection.prototype.onClose = function(evt) {
 		this.publish('close', evt);
 	};
 
 	/**
-	 * Connection#onMessage Triggered from the socket when a message has been
-	 * received. If an error object is sent with the data, it'll trigger
-	 * Connection#onError.
-	 * @triggers connection:data If no error object is found
+	 * Triggered from the socket when a message has been received. If an error object is sent
+	 * with the data, it'll trigger {@link Connection#onError}.
+	 * 
 	 * @private
+	 * @fires connection:data If no error object is found
 	 */
 	Connection.prototype.onMessage = function(evt) {
 		var data = JSON.parse(evt.data || "{}");
@@ -151,8 +158,10 @@ define([
 	};
 
 	/**
-	 * Connection#onTransmit Triggered from pubsub system when something wants to
-	 * send data to the socket.
+	 * Triggered from pubsub system when something wants to send data to the socket.
+	 * 
+	 * @private
+	 * 
 	 * @param {object} data Contains `id` and `data` keys that will be applied to Connection#send
 	 */
 	Connection.prototype.onTransmit = function(data) {
