@@ -8,11 +8,38 @@ define([
 ], function($, BaseView, Instances, InstanceModel, tmpl) {
 	'use strict';
 
-	return (BaseView.extend({
+	return (BaseView.extend(
+		/** @lends EditInstanceView.prototype */
+		{
+
+		/**
+		 * Visualizes a form for adding/editing a specific instance.
+		 * 
+		 * @name EditInstanceView
+		 * @augments BaseView
+		 * @constructs
+		 */
+
+		/**
+		 * Events bound on this view.
+		 * 
+		 * @type {Object}
+		 * @property {String} click_button Triggers the `save` method
+		 */
 		events: {
-			'click button': 'save'
+			'click button': '_save'
 		},
-		save: function() {
+
+		/**
+		 * Maps user-exposed data back to the instance model.
+		 * Triggers a re-render and sets the current model to a new,
+		 * empty {@link InstanceModel}.
+		 *
+		 * @private
+		 * 
+		 * @fires saved
+		 */
+		_save: function() {
 			var inst = this.model,
 				label = this.$el.find('.label').val(),
 				host = this.$el.find('.host').val(),
@@ -35,6 +62,10 @@ define([
 			this.model = new InstanceModel();
 			this.render();
 		},
+
+		/**
+		 * Renders the edit instance view.
+		 */
 		render: function() {
 			this.$el.html(tmpl(this.model.toJSON()));
 			window.console.log('[editInstance:view] rendered');

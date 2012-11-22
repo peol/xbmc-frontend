@@ -184,6 +184,9 @@ define([
 	 * @param {Connection} connection The new connection
 	 */
 	function setConnection(connection) {
+		if (_connection) {
+			_connection.close();
+		}
 		_connection = connection;
 		// retrieve initial data
 		getPlayers();

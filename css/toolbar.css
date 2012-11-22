@@ -34,7 +34,7 @@
 	text-decoration: none;
 }
 
-#toolbar .selected a {
+#toolbar .true a {
 	color: #000;
 	background: #fff;
 }

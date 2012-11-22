@@ -9,16 +9,35 @@ define([
 ], function($, BaseView, tmpl, tmplVideo, tmplEpisode, tmplMovie) {
 	'use strict';
 
-	return (BaseView.extend({
+	return (BaseView.extend(
+		/** @lends NowPlayingView.prototype */
+		{
+
+		/** The element used to render this view */
 		el: $('#nowPlaying'),
-		initialize: function() {
-			this.model.on('change', this.render, this);
-		},
+
+		/**
+		 * List of renderers this view can use.
+		 * @type {Object}
+		 */
 		renderers: {
 			video: tmplVideo,
 			episode: tmplEpisode,
 			movie: tmplMovie
 		},
+
+		/**
+		 * Visualizes what's currently playing on the active instance.
+		 * 
+		 * @name NowPlayingView
+		 * @augments BaseView
+		 * @constructs
+		 */
+		initialize: function() {
+			this.model.on('change', this.render, this);
+		},
+
+		/** Render the now playing view */
 		render: function() {
 			var model = this.model.toJSON(),
 				renderer = this.renderers[model.type],

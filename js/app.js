@@ -11,24 +11,23 @@ define([
 ], function(Connection, api, ToolbarView, ToolbarModel, NowPlayingView, NowPlayingModel, Instances) {
 	'use strict';
 
+	var items = [
+		{ label: 'Overview', view: 'overview' },
+		{ label: 'Remote', view: 'remote' },
+		{ label: 'Settings', view: 'settings' }
+	];
+
 	// toolbar and now playing views are only instansiated once in the app's
 	// life cycle:
-	(new ToolbarView({ model: new ToolbarModel() })).render();
+	(new ToolbarView({ model: new ToolbarModel({ navItems: items }) })).render();
 	(new NowPlayingView({ model: new NowPlayingModel() })).render();
-
-	var currentInstance, currentConnection;
 
 	// whenever an instance model is created/modified/removed, we'll check
 	// if it has been set to active:
 	function connect() {
 		var newInstance = Instances.getActive();
-		if (newInstance && currentInstance !== newInstance) {
-			currentInstance = newInstance;
-			if (currentConnection) {
-				currentConnection.close("switch");
-			}
-			currentConnection = new Connection(newInstance.toString());
-			api.setConnection(currentConnection);
+		if (newInstance) {
+			api.setConnection(new Connection(newInstance.toString()));
 		}
 	}
 	Instances.on('save', connect);

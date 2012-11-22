@@ -6,7 +6,7 @@ define([
 	'use strict';
 
 	return (Backbone.Model.extend(
-		/** @lends Instance.prototype */
+		/** @lends InstanceModel.prototype */
 		{
 		/**
 		 * Default properties for an instance.
@@ -27,10 +27,10 @@ define([
 		},
 
 		/**
-		 * Represents an instance.
+		 * Represents an XBMC instance.
 		 *
-		 * @name Instance
-		 * @augments Backbone.Model
+		 * @name InstanceModel
+		 * @augments BaseView
 		 * @constructs
 		 */
 		initialize: function() {

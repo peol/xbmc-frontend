@@ -8,9 +8,8 @@ define([
 	'views/remote',
 	'views/settings',
 	'views/unknown',
-	'models/overview',
-	'models/settings'
-], function($, Backbone, _, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel, SettingsModel) {
+	'models/overview'
+], function($, Backbone, _, pubsub, OverviewView, RemoteView, SettingsView, UnknownView, OverviewModel) {
 	'use strict';
 
 	var oldView = null,
@@ -39,7 +38,7 @@ define([
 				switchView(new RemoteView());
 			},
 			settings: function() {
-				switchView(new SettingsView({ model: new SettingsModel() }));
+				switchView(new SettingsView());
 			},
 			unknown: function() {
 				switchView(new UnknownView());

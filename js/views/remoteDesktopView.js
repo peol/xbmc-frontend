@@ -68,7 +68,32 @@ define([
 	$.extend(inputActions, globalActions);
 	$.extend(actions, globalActions);
 
-	return (BaseView.extend({
+	return (BaseView.extend(
+		/** @lends RemoteDesktopView.prototype */
+		{
+
+		/**
+		 * View that enables a user with keyboard to remotely interact
+		 * with the XBMC instance by using default XBMC keyboard mappings.
+		 * 
+		 * @name RemoteDesktopView
+		 * @augments BaseView
+		 * @constructs
+		 */
+		initialize: function() {
+			body.on('keydown.remote keypress.remote', this._keyPress.bind(this));
+			pubsub.subscribe('connection:data', this._toggleInputMode, this);
+		},
+
+		/**
+		 * Handles any key-related events and fires calls to the XBMC
+		 * instance if the key's are matching any mappings for the current
+		 * state on the instance.
+		 *
+		 * @private
+		 * 
+		 * @param {Event} e The event object
+		 */
 		_keyPress: function(e) {
 			var action = this.inputFocused ?
 				inputActions[e.which]:
@@ -108,7 +133,17 @@ define([
 				}
 			}
 		},
-		toggleInputMode: function(data) {
+
+		/**
+		 * Toggles the internal input mode. When the XBMC instance
+		 * opens up a dialog that requires input, this view will change
+		 * key mappings to allow the user to send text.
+		 *
+		 * @private
+		 * 
+		 * @param {Object} data The data from the connection:data subscription
+		 */
+		_toggleInputMode: function(data) {
 			if (!this.inputFocused && data.method === 'Input.OnInputRequested') {
 				this.inputFocused = true;
 				cache = [];
@@ -117,13 +152,15 @@ define([
 				cache = [];
 			}
 		},
+
+		/** Renders the remote desktop view */
 		render: function() {
-			body.on('keydown.remote keypress.remote', this._keyPress.bind(this));
-			pubsub.subscribe('connection:data', this.toggleInputMode, this);
 			this.$el.html(template());
 			window.console.log('[remoteDesktop:view] rendered');
 			return this;
 		},
+
+		/** Destroys the remote desktop view */
 		destroy: function() {
 			body.off('.remote');
 			BaseView.prototype.destroy.apply(this, arguments);

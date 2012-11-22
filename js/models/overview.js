@@ -6,22 +6,26 @@ define([
 	'use strict';
 
 	return (Backbone.Model.extend(
-		/** @lends Overview.prototype */
+		/** @lends OverviewModel.prototype */
 		{
 
 		/**
 		 * The default properties for an overview model.
 		 * All current properties are private to this model.
+		 *
+		 * @type {Object}
 		 */
 		defaults: {
+			/** @private */
 			instance: null,
+			/** @private */
 			isActive: false
 		},
 
 		/**
 		 * Represents an overview.
 		 *
-		 * @name Overview
+		 * @name OverviewModel
 		 * @augments Backbone.Model
 		 * @constructs
 		 */
