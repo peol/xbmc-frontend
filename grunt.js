@@ -38,14 +38,16 @@ module.exports = function(grunt) {
 					excludeAfterBuild: true
 				},
 				fileExclusionRegExp: new RegExp(
-					// ignore node_modules, tasks dirs
-					"^(node_modules|tasks)$" +
+					// ignore node_modules, tasks, docs dirs
+					"^(node_modules|tasks|docs)$" +
 					// ignore r.js, grunt.js
 					"|^(grunt|r)\\.js$" +
 					// ignore .md files
 					"|\\.md$" +
 					// ignore .json files
 					"|\\.json$" +
+					// ignore .conf files
+					"|\\.conf$" +
 					// ignore .dotfiles
 					"|^\\.",
 					"i"
