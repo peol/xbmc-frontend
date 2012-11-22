@@ -7,7 +7,7 @@ define([
 	'use strict';
 
 	return new (Backbone.Collection.extend(
-		/** @lends Instances.prototype */
+		/** @lends InstanceCollection.prototype */
 		{
 
 		model: InstanceModel,
@@ -22,7 +22,7 @@ define([
 		 * Collection of {@link Instance} models.
 		 * Will read any data stored and creates new models from that data.
 		 *
-		 * @name Instances
+		 * @name InstanceCollection
 		 * @augments Backbone.Collection
 		 * @constructs
 		 */
