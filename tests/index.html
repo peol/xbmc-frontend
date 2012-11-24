@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>xbmc-frontend test-runner</title>
+	<link rel="stylesheet" href="mocha/mocha.css">
+</head>
+<body>
+	<div id="mocha"></div>
+	<script src="mocha/mocha.js"></script>
+	<script src="chai/chai.js"></script>
+	<script src="sinon/sinon.js"></script>
+	<script src="../js/vendor/requirejs/require.js"></script>
+	<script>
+		expect = chai.expect;
+		mocha.setup('bdd');
+		require.config({ baseUrl: '../js' });
+		define('app', [
+			'../tests/lib-store',
+			'../tests/lib-pubsub'
+		], function() {
+			mocha.run();
+		});
+	</script>
+	<script src="../js/main.js"></script>
+</body>
+</html>

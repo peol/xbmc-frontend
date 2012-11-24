@@ -12,16 +12,26 @@ module.exports = function(grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
 		},
 		lint: {
-			files: ['grunt.js', 'js/!(vendor)/**.js', 'js/*.js']
+			files: ['grunt.js', 'js/!(vendor)/**.js', 'js/*.js', 'tests/*.js']
 		},
 		watch: {
 			files: '<config:lint.files>',
-			tasks: 'lint'
+			tasks: 'lint mocha'
 		},
 		server: {
+			async: true,
 			build: {
 				base: './target/',
 				async: true
+			}
+		},
+		mocha: {
+			all: {
+				src: [ 'tests/index.html' ],
+				options: {
+					ignoreLeaks: false
+				},
+				run: false
 			}
 		},
 		requirejs: {
@@ -76,8 +86,8 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
+	grunt.loadNpmTasks('grunt-mocha');
 	grunt.loadTasks('tasks');
 	grunt.registerTask('default', 'lint requirejs');
-	grunt.registerTask('run', 'lint server watch');
 	grunt.registerTask('run-build', 'default server:build');
 };

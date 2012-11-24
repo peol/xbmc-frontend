@@ -34,7 +34,15 @@ define([
 	 * @param {Function} callback The callback to invoke when topic gets published
 	 * @param {Object} scope (optional) Define what `this` is in the callback
 	 */
-	pubsub.subscribe = pubsub.on;
+	pubsub.subscribe = function(topic, callback, scope) {
+		if (typeof topic === 'undefined') {
+			throw new Error('PubSub: Trying to subscribe without topic defined');
+		}
+		if (typeof callback === 'undefined') {
+			throw new Error('PubSub: Trying to subscribe without a callback');
+		}
+		pubsub.on.call(pubsub, topic, callback, scope);
+	};
 
 	/**
 	 * Unsubscribe from a topic. Use this to be remove an existing subscription.
@@ -46,7 +54,12 @@ define([
 	 * @param {Function} callback (optional) The callback used to subscribe, if omitted, all
 	 *                            subscriptions to the topic will be removed
 	 */
-	pubsub.unsubscribe = pubsub.off;
+	pubsub.unsubscribe = function(topic, callback) {
+		if (typeof topic === 'undefined') {
+			throw new Error('PubSub: Trying to unsubscribe without topic defined');
+		}
+		pubsub.off.call(pubsub, topic, callback);
+	};
 
 	/**
 	 * Publish a topic. Use this to alert potential subscribers.
