@@ -13,5 +13,13 @@ You'll need node and npm installed in your path, then, just follow these steps:
 ```
 $ cd xbmc-frontend
 $ npm install
-$ grunt [lint|requirejs]
+// mocha = unit tests
+// lint = run JSHint on project
+// requirejs = build project, output to `target/`
+// watch = run lint + mocha, watching for file changes
+// run-build = lint + requirejs + server against `target/`
+$ grunt [mocha|lint|requirejs|watch|run-build]
 ```
+
+# Documentation
+There's currently a bit of documentation inside the code, and you can also generate it by running jsdoc on the project root folder with parameters `-c jsdoc3.conf js/`.
