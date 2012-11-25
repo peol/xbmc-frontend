@@ -17,7 +17,8 @@
 		require.config({ baseUrl: '../js' });
 		define('app', [
 			'../tests/lib-store',
-			'../tests/lib-pubsub'
+			'../tests/lib-pubsub',
+			'../tests/model-instance'
 		], function() {
 			mocha.run();
 		});

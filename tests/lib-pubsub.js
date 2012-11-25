@@ -7,7 +7,7 @@ define([
 	});
 
 	describe('PubSub', function() {
-		it('should expose subscribe, unsubscribe, and publish methods', function() {
+		it('should expose `subscribe`, `unsubscribe`, and `publish` methods', function() {
 			expect(pubsub.subscribe).to.be.an('function');
 			expect(pubsub.unsubscribe).to.be.an('function');
 			expect(pubsub.publish).to.be.an('function');
@@ -35,6 +35,13 @@ define([
 			pubsub.subscribe('test', spy, self);
 			pubsub.publish('test', 'foo');
 			expect(spy.callCount).to.equal(1);
+		});
+
+		it('should call a subscriber with the published data', function() {
+			pubsub.subscribe('test', function(data) {
+				expect(data).to.be.an('object').and.have.property('foo', true);
+			});
+			pubsub.publish('test', { foo: true });
 		});
 
 		it('should unsubscribe only a specific callback', function() {
