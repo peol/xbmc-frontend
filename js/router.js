@@ -53,6 +53,6 @@ define([
 		pubsub.publish('router:viewchange', Backbone.history.fragment);
 	});
 
-    Backbone.history.start();
-    return router;
+	Backbone.history.start();
+	return router;
 });

@@ -2,8 +2,9 @@
 define([
 	'jquery',
 	'views/base',
-	'hbs!tmpl/toolbar'
-], function($, BaseView, tmpl) {
+	'hbs!tmpl/toolbar',
+	'lib/pubsub'
+], function($, BaseView, tmpl, pubsub) {
 	'use strict';
 
 	return (BaseView.extend(
@@ -22,7 +23,7 @@ define([
 		 * @constructs
 		 */
 		initialize: function() {
-			this.model.on('change', this.render, this);
+			pubsub.subscribe('router:viewchange', this.render, this);
 		},
 
 		/** Renders the toolbar view */
