@@ -30,9 +30,12 @@ define([
 	 * @function
 	 * @memberOf module:PubSub
 	 * 
+	 * @throws {Error} If no topic is sent in
+	 * @throws {Error} If no callback is sent in
+	 * 
 	 * @param {String} topic The topic to subscribe to
 	 * @param {Function} callback The callback to invoke when topic gets published
-	 * @param {Object} scope (optional) Define what `this` is in the callback
+	 * @param {Object} [scope] Define what `this` is in the callback
 	 */
 	pubsub.subscribe = function(topic, callback, scope) {
 		if (typeof topic === 'undefined') {
@@ -49,11 +52,13 @@ define([
 	 * 
 	 * @function
 	 * @memberOf module:PubSub
+	 *
+	 * @throws {Error} If no topic is sent in
 	 * 
 	 * @param {String} topic The topic to unsubscribe from
-	 * @param {Function} callback (optional) The callback used to subscribe, if omitted, all
-	 *                            subscriptions to the topic will be removed
-	 * @param {Object} scope (optional) The scope to unbind
+	 * @param {Function} [callback] The callback used to subscribe, if omitted, all
+	 *                              subscriptions to the topic will be removed
+	 * @param {Object} [scope] The scope to unbind
 	 */
 	pubsub.unsubscribe = function(topic, callback, scope) {
 		if (typeof topic === 'undefined') {
@@ -68,8 +73,10 @@ define([
 	 * @function
 	 * @memberOf module:PubSub
 	 * 
+	 * @throws {Error} If no topic is sent in
+	 * 
 	 * @param {String} topic The topic to publish on
-	 * @param {Object} data (optional) Data attached to the publish
+	 * @param {Object} [data] Data attached to the publish
 	 */
 	pubsub.publish = function(topic, data) {
 		if (typeof topic === 'undefined') {

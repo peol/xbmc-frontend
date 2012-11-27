@@ -1,7 +1,8 @@
 /*global define*/
 define([
+	'jquery',
 	'lib/pubsub'
-], function(pubsub) {
+], function($, pubsub) {
 	'use strict';
 
 	/**
@@ -10,13 +11,19 @@ define([
 	 *
 	 * @exports Connection
 	 * 
-	 * @param {String} uri (optional) URI, passed into Connection#create
+	 * @param {String} [uri] URI, passed into Connection#create
 	 */
 	var Connection = function(uri) {
 		this.sendQueue = [];
+		this.deferreds = {};
 		if (uri) {
 			this.create(uri);
 		}
+	};
+
+	Connection._expando = 0;
+	Connection.generateId = function() {
+		return '__id' + (++Connection._expando);
 	};
 
 	/**
@@ -37,7 +44,6 @@ define([
 		this.socket.onerror = this.onError.bind(this);
 		this.socket.onclose = this.onClose.bind(this);
 		this.socket.onmessage = this.onMessage.bind(this);
-		pubsub.subscribe('connection:transmit', this.onTransmit, this);
 	};
 
 	/**
@@ -52,27 +58,29 @@ define([
 	/**
 	 * Used to send JSON-RPC calls through the socket.
 	 * 
-	 * @throws {Error} If arguments are missing
+	 * @throws {Error} If arguments are not equal to 1
 	 * @fires connection:send The stringified data that are being sent
 	 * 
-	 * @param {String} id The unique ID to tie this request to the response
 	 * @param {Object} data The data needed to do the JSON-RPC call
+	 *
+	 * @returns {$.Deferred} A promise that will be resolved/rejected once the
+	 *                       instance has answered our call
 	 */
-	Connection.prototype.send = function(id, data) {
-		if (arguments.length !== 2) {
-			throw new Error('Missing arguments in connection#send');
+	Connection.prototype.send = function(data) {
+		if (arguments.length !== 1) {
+			throw new Error('Connection: Unknown arguments');
 		}
+		var id = data.id = data.id || Connection.generateId(),
+			dfd = this.deferreds[id] = this.deferreds[id] || $.Deferred();
 		if (!this.isActive()) {
-			this.sendQueue.push([id, data]);
-			return;
-		}
-		data.jsonrpc = '2.0';
-		data.id = id;
-		if (typeof data !== 'string') {
+			this.sendQueue.push(data);
+		} else {
+			data.jsonrpc = '2.0';
 			data = JSON.stringify(data);
+			this.publish('send', data);
+			this.socket.send(data);
 		}
-		this.publish('send', data);
-		this.socket.send(data);
+		return dfd.promise();
 	};
 
 	/**
@@ -86,7 +94,6 @@ define([
 		} catch(err) {
 			this.publish('error', err);
 		}
-		pubsub.unsubscribe('connection:transmit', this.onTransmit);
 	};
 
 	/**
@@ -114,7 +121,7 @@ define([
 		evt.uri = this.uri;
 		this.publish('open', evt);
 		this.sendQueue.forEach(function(item) {
-			this.send.apply(this, item);
+			this.send(item);
 		}.bind(this));
 		this.sendQueue = [];
 	};
@@ -144,28 +151,33 @@ define([
 	/**
 	 * Triggered from the socket when a message has been received. If an error object is sent
 	 * with the data, it'll trigger {@link Connection#onError}.
+	 *
+	 * This will resolve (or reject if any errors are found) the deferreds that's been attached
+	 * to this call. If none is found, it'll just silently do nothing.
 	 * 
 	 * @private
-	 * @fires connection:data If no error object is found
+	 * @fires connection:data Data attached to the response
+	 * @fires connection:notification Data attached to the notification
 	 */
 	Connection.prototype.onMessage = function(evt) {
-		var data = JSON.parse(evt.data || "{}");
+		var data = JSON.parse(evt.data || "{}"),
+			id = data && data.id,
+			dfd = this.deferreds[id];
+		delete this.deferreds[id];
 		if (data.error) {
 			this.onError(evt);
+			if (dfd) {
+				dfd.reject(data);
+			}
 			return;
 		}
 		this.publish('data', data);
-	};
-
-	/**
-	 * Triggered from pubsub system when something wants to send data to the socket.
-	 * 
-	 * @private
-	 * 
-	 * @param {object} data Contains `id` and `data` keys that will be applied to Connection#send
-	 */
-	Connection.prototype.onTransmit = function(data) {
-		this.send(data.id, data.data);
+		if (data.method && data.method.indexOf('.On') > -1 ) {
+			this.publish('notification', data);
+		}
+		if (dfd) {
+			dfd.resolve(data);
+		}
 	};
 
 	return Connection;

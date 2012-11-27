@@ -19,7 +19,6 @@ module.exports = function(grunt) {
 			tasks: 'lint mocha'
 		},
 		server: {
-			async: true,
 			build: {
 				base: './target/',
 				async: true

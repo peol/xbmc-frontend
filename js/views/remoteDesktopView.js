@@ -10,10 +10,7 @@ define([
 	'use strict';
 
 	function send(method, params) {
-		api.send(method, {
-			method: method,
-			params: params || {}
-		});
+		api.send(method, params);
 	}
 
 	function execAction(action) {
@@ -118,18 +115,14 @@ define([
 				if (e.which !== 13) {
 					cache.push(String.fromCharCode(e.which));
 					api.send('Input.SendText', {
-						method: 'Input.SendText',
-						params: {
-							text: cache.join(''),
-							done: false
-						}});
+						text: cache.join(''),
+						done: false
+					});
 				} else {
 					api.send('Input.SendText', {
-						method: 'Input.SendText',
-						params: {
-							text: cache.join(''),
-							done: true
-						}});
+						text: cache.join(''),
+						done: true
+					});
 				}
 			}
 		},

@@ -14,6 +14,7 @@ define([
 
 		/**
 		 * Internal storage used to read/write instances between sessions
+		 * 
 		 * @type {Store}
 		 */
 		store: new Store('instances'),
@@ -42,6 +43,7 @@ define([
 		/**
 		 * Set a specific instance as currently active. Only one instance
 		 * can be active at a time.
+		 * 
 		 * @param {Number} index The instance index to set to active
 		 */
 		setActive: function(index) {
@@ -57,6 +59,7 @@ define([
 
 		/**
 		 * Get the currently active instance.
+		 * 
 		 * @returns {Models.Instance} The current instance or null if none found
 		 */
 		getActive: function() {
@@ -65,6 +68,7 @@ define([
 
 		/**
 		 * Save the current instance list to storage.
+		 * 
 		 * @fires save
 		 */
 		save: function() {
