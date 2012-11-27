@@ -4817,15 +4817,14 @@ exports.slug = function(str){
 
 exports.clean = function(str) {
   str = str
-    .replace(/^function *\(.*\) *{/, '')
+    .replace(/^function *\(.*\) *{\n/, '')
     .replace(/\s+\}$/, '');
 
-  var spaces = str.match(/^\n?( *)/)[1].length
-    , re = new RegExp('^ {' + spaces + '}', 'gm');
-
+  var spaces = str.match(/^\n?(\t*)/)[1].length
+    , re = new RegExp('^\t{' + spaces + '}', 'gm');
   str = str.replace(re, '');
 
-  return exports.trim(str);
+  return str;//exports.trim(str);
 };
 
 /**
