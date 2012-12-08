@@ -10,10 +10,17 @@
 		"type": "git",
 		"url": "https://github.com/peol/xbmc-frontend"
 	},
-	"dependencies": {
+	"scripts": {
+		"dev": "grunt",
+		"test": "grunt mocha"
+	},
+	"devDependencies": {
 		"grunt": "0.3.x",
 		"grunt-contrib-requirejs": "0.3.x",
 		"grunt-mocha": "0.1.x",
 		"connect": "2.6.x"
 	}
 }
+
+
+
