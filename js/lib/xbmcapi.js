@@ -1,11 +1,12 @@
 /*global define*/
 define([
+	'jquery',
 	'lib/xbmcapi-namespace',
 	'lib/xbmcapi-handlers',
 	'lib/xbmcapi-media',
 	'lib/xbmcapi-notifications',
 	'lib/pubsub'
-], function(ns, handlers, media, notifications, pubsub) {
+], function($, ns, handlers, media, notifications, pubsub) {
 	'use strict';
 
 	/**
@@ -22,7 +23,8 @@ define([
 	 * // => will show a notification on the lower right on the XBMC instance
 	 */
 	var api = ns,
-		_connection;
+		_connection,
+		_queue = [];
 	api.handlers = handlers;
 	api.media = media;
 	api.notifications = notifications;
@@ -38,6 +40,10 @@ define([
 			_connection.close();
 		}
 		_connection = connection;
+		_queue.forEach(function(item) {
+			api.send(item.method, item.params, item.dfd);
+		});
+		_queue = [];
 		api.initialize();
 	};
 
@@ -59,11 +65,21 @@ define([
 	 *                       instance has given us an answer, see the jQuery API documentation
 	 *                       on how to use a deferred
 	 */
-	api.send = function(method, params) {
+	api.send = function(method, params, dfd) {
 		if (typeof params === 'undefined') {
 			params = {};
 		}
-		return _connection.send({ method: method, params: params });
+		var data = { method: method, params: params, dfd: $.Deferred() },
+			connDfd;
+		if (!_connection) {
+			_queue.push(data);
+			return data.dfd;
+		}
+		connDfd = _connection.send(data);
+		if (dfd) {
+			connDfd.pipe(dfd.resolve);
+		}
+		return connDfd;
 	};
 
 	/**

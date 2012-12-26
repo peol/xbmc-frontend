@@ -78,8 +78,15 @@ define([
 		 * @constructs
 		 */
 		initialize: function() {
+			var self = this;
 			body.on('keydown.remote keypress.remote', this._keyPress.bind(this));
 			pubsub.subscribe('connection:data', this._toggleInputMode, this);
+				// because of synching, we need to make sure the user isn't currently
+				// having a virtual keyboard up when we're initializing
+				// 10103 is the window id for the virtual keyboard.
+			api.send('GUI.GetProperties', { properties: ['currentwindow'] }).done(function(data) {
+				self.inputFocused = data.result.currentwindow.id === 10103;
+			});
 		},
 
 		/**
