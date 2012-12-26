@@ -75,6 +75,7 @@ define([
 			_queue.push(data);
 			return data.dfd;
 		}
+		delete data.dfd;
 		connDfd = _connection.send(data);
 		if (dfd) {
 			connDfd.pipe(dfd.resolve);
