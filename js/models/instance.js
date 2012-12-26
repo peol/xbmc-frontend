@@ -35,6 +35,7 @@ define([
 		 */
 		initialize: function() {
 			pubsub.subscribe('connection:open', this._setConnected, this);
+			pubsub.subscribe('connection:close', this._setConnected, this);
 		},
 
 		/**
@@ -46,7 +47,11 @@ define([
 		 * @param {Object} evt The PubSub data attached to the publish
 		 */
 		_setConnected: function(evt) {
-			this.set('isConnected', evt.uri === this.toString());
+			var isConn = false;
+			if (evt.type !== 'close' && evt.uri === this.toString()) {
+				isConn = true;
+			}
+			this.set('isConnected', isConn);
 		},
 
 		/**

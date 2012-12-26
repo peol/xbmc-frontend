@@ -15,7 +15,7 @@ define([
 		{ label: 'Overview', view: 'overview' },
 		{ label: 'Remote', view: 'remote' },
 		{ label: 'Settings', view: 'settings' }
-	];
+	], oldInstance;
 
 	// toolbar and now playing views are only instansiated once in the app's
 	// life cycle:
@@ -26,8 +26,9 @@ define([
 	// if it has been set to active:
 	function connect() {
 		var newInstance = Instances.getActive();
-		if (newInstance) {
+		if (newInstance !== oldInstance) {
 			api.setConnection(new Connection(newInstance.toString()));
+			oldInstance = newInstance;
 		}
 	}
 	Instances.on('save', connect);

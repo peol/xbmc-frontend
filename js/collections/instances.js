@@ -34,8 +34,6 @@ define([
 				insts.forEach(function(inst) {
 					self.add(new InstanceModel(inst));
 				});
-			} else {
-				this.save();
 			}
 			this.on('add remove change', this.save, this);
 		},

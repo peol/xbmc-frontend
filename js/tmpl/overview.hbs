@@ -1,9 +1,9 @@
-{{#if isActive}}
-	<p>Status: Connected to "{{instance.label}}" at {{instance.host}} on port {{instance.port}}</p>
-{{else}}
-	{{#if instance}}
-		<p>Status: Disconnected from "{{instance.label}}"</p>
+{{#if instance}}
+	{{#if isActive}}
+		<p>Status: Connected to "{{instance.label}}" at {{instance.host}} on port {{instance.port}}</p>
 	{{else}}
-		<p>Status: Disconnected, no active instance. Please add one in <a href="#settings">Settings</a>.</p>
+		<p>Status: Disconnected from "{{instance.label}}"</p>
 	{{/if}}
+{{else}}
+	<p>Status: Disconnected, no active instance. Please add one in <a href="#settings">Settings</a>.</p>
 {{/if}}
