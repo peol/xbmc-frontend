@@ -8,7 +8,7 @@ When you have xbmc-frontend up and running, go into the "Settings" tab and add y
 The XBMC RPC call API can be found at: http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v5
 
 # Building xbmc-frontend
-![Travis CI live status](https://secure.travis-ci.org/peol/xbmc-frontend.png?branch=master)
+[![Build Status](https://travis-ci.org/peol/xbmc-frontend.png?branch=master)](https://travis-ci.org/peol/xbmc-frontend)
 
 You'll need node and npm installed in your path, then, just follow these steps:
 
