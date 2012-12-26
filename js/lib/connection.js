@@ -120,10 +120,13 @@ define([
 	Connection.prototype.onOpen = function(evt) {
 		evt.uri = this.uri;
 		this.publish('open', evt);
-		this.sendQueue.forEach(function(item) {
-			this.send(item);
-		}.bind(this));
-		this.sendQueue = [];
+		setTimeout(function() {
+			this.sendQueue.forEach(function(item) {
+				this.send(item);
+			}, this);
+			this.sendQueue = [];
+
+		}.bind(this), 500);
 	};
 
 	/**
