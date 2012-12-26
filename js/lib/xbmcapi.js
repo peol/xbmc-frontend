@@ -69,13 +69,13 @@ define([
 		if (typeof params === 'undefined') {
 			params = {};
 		}
-		var data = { method: method, params: params, dfd: $.Deferred() },
+		var data = { method: method, params: params },
 			connDfd;
 		if (!_connection) {
+			data.dfd = $.Deferred();
 			_queue.push(data);
-			return data.dfd;
+			return data.dfd.promise();
 		}
-		delete data.dfd;
 		connDfd = _connection.send(data);
 		if (dfd) {
 			connDfd.pipe(dfd.resolve);
