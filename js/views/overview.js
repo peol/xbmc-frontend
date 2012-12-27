@@ -1,13 +1,19 @@
 /*global define*/
 define([
 	'views/base',
+	'lib/xbmcapi',
 	'hbs!tmpl/overview'
-], function(BaseView, tmpl) {
+], function(BaseView, api, tmpl) {
 	'use strict';
 
 	return (BaseView.extend(
 		/** @lends OverviewView.prototype */
 		{
+
+		/** Events for the overview view */
+		events: {
+			'click .retry': '_retry'
+		},
 
 		/**
 		 * Visualizes an overview on what's going on. Showing
@@ -20,6 +26,15 @@ define([
 		initialize: function() {
 			this.$el.addClass('view-overview');
 			this.model.on('change', this.render, this);
+		},
+
+		/**
+		 * Event handler for the retry link when the instance is disconnected.
+		 *
+		 * @private
+		 */
+		_retry: function() {
+			api.connect();
 		},
 
 		/** Renders the overview view */

@@ -112,6 +112,18 @@ define([
 		});
 	};
 
+	/**
+	 * Connect to the web socket, mainly used to connect after being disconnected.
+	 */
+	api.connect = function() {
+		if (_connection) {
+			if (_connection.isActive()) {
+				_connection.close();
+			}
+			_connection.create();
+		}
+	};
+
 	pubsub.subscribe('connection:open', function() {
 		api.message('Attached to XBMC instance.');
 	});

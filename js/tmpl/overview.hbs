@@ -2,7 +2,7 @@
 	{{#if isActive}}
 		<p>Status: Connected to "{{instance.label}}" at {{instance.host}} on port {{instance.port}}</p>
 	{{else}}
-		<p>Status: Disconnected from "{{instance.label}}"</p>
+		<p>Status: Disconnected from "{{instance.label}}". <a href="javascript:;" class="retry">Retry</a>.</p>
 	{{/if}}
 {{else}}
 	<p>Status: Disconnected, no active instance. Please add one in <a href="#settings">Settings</a>.</p>

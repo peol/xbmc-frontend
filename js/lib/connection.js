@@ -17,7 +17,8 @@ define([
 		this.sendQueue = [];
 		this.deferreds = {};
 		if (uri) {
-			this.create(uri);
+			this.uri = uri;
+			this.create();
 		}
 	};
 
@@ -35,10 +36,10 @@ define([
 	 * @param {String} uri The URI to connect to
 	 */
 	Connection.prototype.create = function(uri) {
-		if (!uri) {
+		if (!uri && !this.uri) {
 			throw new Error('No URI sent to Connection#create');
 		}
-		this.uri = uri;
+		this.uri = uri || this.uri;
 		this.socket = new WebSocket(this.uri);
 		this.socket.onopen = this.onOpen.bind(this);
 		this.socket.onerror = this.onError.bind(this);
