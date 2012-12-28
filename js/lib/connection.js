@@ -77,8 +77,8 @@ define([
 			this.sendQueue.push(data);
 		} else {
 			data.jsonrpc = '2.0';
+			this.publish('send', $.extend(true, {}, data));
 			data = JSON.stringify(data);
-			this.publish('send', data);
 			this.socket.send(data);
 		}
 		return dfd.promise();
@@ -175,9 +175,10 @@ define([
 			}
 			return;
 		}
-		this.publish('data', data);
 		if (data.method && data.method.indexOf('.On') > -1 ) {
 			this.publish('notification', data);
+		} else {
+			this.publish('data', data);
 		}
 		if (dfd) {
 			dfd.resolve(data);
