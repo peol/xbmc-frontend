@@ -19,6 +19,19 @@ define([
 
 	// toolbar and now playing views are only instansiated once in the app's
 	// life cycle:
+
+	NowPlayingModel.fetch(121).done(function(model) {
+		window.console.log('Model data 1', model.toJSON());
+	});
+
+	NowPlayingModel.fetch(122).done(function(model) {
+		window.console.log('Model data 2', model.toJSON());
+	});
+
+	NowPlayingModel.fetch(123).done(function(model) {
+		window.console.log('Model data 3', model.toJSON());
+	});
+
 	(new ToolbarView({ model: new ToolbarModel({ navItems: items }) })).render();
 	(new NowPlayingView({ model: new NowPlayingModel() })).render();
 

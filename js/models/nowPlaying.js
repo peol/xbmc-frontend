@@ -1,11 +1,11 @@
 /*global define*/
 define([
-	'Backbone',
+	'models/base',
 	'lib/pubsub'
-], function(Backbone, pubsub) {
+], function(BaseModel, pubsub) {
 	'use strict';
 
-	return (Backbone.Model.extend(
+	return (BaseModel.extend(
 		/** @lends NowPlayingModel.prototype */
 		{
 

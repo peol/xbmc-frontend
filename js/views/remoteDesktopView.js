@@ -103,8 +103,8 @@ define([
 				inputActions[e.which]:
 				actions[e.which];
 
-			if (e.metaKey || e.altKey || e.ctrlKey) {
-				// we only work with clean key strokes
+			if (e.ctrlKey) {
+				// let ctrl stuff be
 				return;
 			}
 			else if (e.type === 'keydown' && _.isFunction(action)) {
